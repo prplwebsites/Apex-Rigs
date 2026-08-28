@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX RIGS | Admin Operations Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .modal { display: none; }
+    .modal.open { display: flex; }
+  </style>
+</head>
+<body class="bg-[#0f1115] text-gray-100 antialiased min-h-screen flex flex-col justify-between">
+
+  <div>
+    <header class="bg-[#161920] border-b border-gray-800 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <div class="text-lg font-black tracking-tighter text-white uppercase">
+            APEX<span class="text-red-600">ADMIN</span>
+          </div>
+          <span class="bg-gray-800 text-gray-400 text-[10px] font-mono px-2 py-0.5 rounded border border-gray-700">v2.4 DASHBOARD</span>
+        </div>
+        
+        <nav class="flex gap-4 text-xs font-bold uppercase tracking-wider text-gray-400">
+          <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn hover:text-white px-3 py-2 rounded">Overview</button>
+          <button onclick="switchTab('orders')" id="tab-btn-orders" class="tab-btn hover:text-white px-3 py-2 rounded text-white bg-gray-800">Orders (3)</button>
+          <button onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn hover:text-white px-3 py-2 rounded">Inventory</button>
+          <button onclick="switchTab('quotes')" id="tab-btn-quotes" class="tab-btn hover:text-white px-3 py-2 rounded">Quote Requests (2)</button>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <label class="hidden lg:flex items-center bg-[#0f1115] border border-gray-800 rounded px-3 py-2 gap-2">
+            <span class="text-gray-500 text-xs">Search</span>
+            <input id="dashboard-search" type="search" placeholder="Orders, systems, customers..." class="bg-transparent outline-none text-xs text-white w-48 placeholder:text-gray-600">
+          </label>
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span class="text-xs font-mono text-gray-400">STORE ONLINE</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-[#161920] border border-gray-800 p-4 rounded">
+          <span class="text-[10px] font-bold uppercase text-gray-500 block">Monthly Revenue</span>
+          <span class="text-xl font-black text-white font-mono">184,500 Dh</span>
+        </div>
+        <div class="bg-[#161920] border border-gray-800 p-4 rounded">
+          <span class="text-[10px] font-bold uppercase text-gray-500 block">Pending Builds</span>
+          <span class="text-xl font-black text-amber-400 font-mono">4 Rigs</span>
+        </div>
+        <div class="bg-[#161920] border border-gray-800 p-4 rounded">
+          <span class="text-[10px] font-bold uppercase text-gray-500 block">In-Stock Rigs</span>
+          <span class="text-xl font-black text-emerald-400 font-mono">12 Units</span>
+        </div>
+        <div class="bg-[#161920] border border-gray-800 p-4 rounded">
+          <span class="text-[10px] font-bold uppercase text-gray-500 block">Open Quotes</span>
+          <span class="text-xl font-black text-red-500 font-mono">2 Requests</span>
+        </div>
+      </div>
+
+      <section id="tab-overview" class="tab-content">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-lg font-black uppercase text-white">Website Overview & Revenue</h2>
+            <p class="text-xs text-gray-500 mt-1">Store performance snapshot for the current period.</p>
+          </div>
+          <select id="revenue-period" onchange="updateRevenuePeriod()" class="bg-[#161920] border border-gray-800 rounded px-3 py-2 text-xs text-gray-300">
+            <option>This month</option>
+            <option>Last month</option>
+            <option>This quarter</option>
+          </select>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Revenue</span><span id="overview-revenue" class="text-2xl font-black text-white font-mono">184,500 Dh</span><span class="text-xs text-emerald-400 block mt-2">+12.8% vs previous period</span></div>
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Orders Completed</span><span class="text-2xl font-black text-white font-mono">27</span><span class="text-xs text-gray-500 block mt-2">Across gaming and workstation rigs</span></div>
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Average Order Value</span><span class="text-2xl font-black text-white font-mono">6,833 Dh</span><span class="text-xs text-gray-500 block mt-2">Based on completed orders</span></div>
+        </div>
+        <div class="bg-[#161920] border border-gray-800 rounded p-5">
+          <h3 class="text-sm font-black uppercase text-white mb-4">Revenue By Channel</h3>
+          <div class="space-y-4 text-xs font-mono">
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Pre-built gaming rigs</span><span class="text-white">112,300 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-red-600 rounded" style="width:61%"></div></div></div>
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Custom builds</span><span class="text-white">49,700 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-amber-500 rounded" style="width:27%"></div></div></div>
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Workstations</span><span class="text-white">22,500 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-emerald-500 rounded" style="width:12%"></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-orders" class="tab-content active">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-black uppercase text-white">Active Customer Orders</h2>
+          <button onclick="openManualOrder()" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-3 py-2 rounded">
+            + Manual Order
+          </button>
+        </div>
+
+        <div class="bg-[#161920] border border-gray-800 rounded overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-300 font-mono">
+            <thead class="bg-black/50 text-gray-500 uppercase border-b border-gray-800">
+              <tr>
+                <th class="p-4">Order ID</th>
+                <th class="p-4">Customer</th>
+                <th class="p-4">Mobile</th>
+                <th class="p-4">System Selected</th>
+                <th class="p-4">Total</th>
+                <th class="p-4">Build Status</th>
+                <th class="p-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800">
+              <tr>
+                <td class="p-4 font-bold text-white">#AR-9082</td>
+                <td class="p-4">Marcus Vance<br/><span class="text-gray-500 text-[10px]">marcus@example.com</span></td>
+                <td class="p-4 text-gray-300">+212 6 12 34 56 78</td>
+                <td class="p-4">The Apex 7800X3D</td>
+                <td class="p-4 text-white font-bold">17,990 Dh</td>
+                <td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">Stress Testing (FurMark)</span></td>
+                <td class="p-4 text-right">
+                  <button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-bold text-white">#AR-9081</td>
+                <td class="p-4">Sarah Jenkins<br/><span class="text-gray-500 text-[10px]">s.jenkins@gmail.com</span></td>
+                <td class="p-4 text-gray-300">+212 6 23 45 67 89</td>
+                <td class="p-4">The Vector i5</td>
+                <td class="p-4 text-white font-bold">9,990 Dh</td>
+                <td class="p-4"><span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Ready for Pickup</span></td>
+                <td class="p-4 text-right">
+                  <button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-bold text-white">#AR-9080</td>
+                <td class="p-4">David K.<br/><span class="text-gray-500 text-[10px]">dk_gaming@yahoo.com</span></td>
+                <td class="p-4 text-gray-300">+212 6 34 56 78 90</td>
+                <td class="p-4">The Dominator 4090</td>
+                <td class="p-4 text-white font-bold">34,990 Dh</td>
+                <td class="p-4"><span class="bg-blue-950 text-blue-400 border border-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">Parts Sourced / Assembling</span></td>
+                <td class="p-4 text-right">
+                  <button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-inventory" class="tab-content">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-black uppercase text-white">Store Inventory & Pre-Built Stock</h2>
+          <button onclick="openInventoryEditor()" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-3 py-2 rounded">
+            + Add New Product
+          </button>
+        </div>
+
+        <div class="bg-[#161920] border border-gray-800 rounded overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-300 font-mono">
+            <thead class="bg-black/50 text-gray-500 uppercase border-b border-gray-800">
+              <tr>
+                <th class="p-4">System Name</th>
+                <th class="p-4">Specs</th>
+                <th class="p-4">Price</th>
+                <th class="p-4">Stock Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-body" class="divide-y divide-gray-800">
+              <tr>
+                <td class="p-4 font-bold text-white">The Vector i5</td>
+                <td class="p-4">RTX 4060 8GB</td>
+                <td class="p-4 font-bold text-white">9,990 Dh</td>
+                <td class="p-4"><span class="text-emerald-400 font-bold">5 Units Available</span></td>
+                <td class="p-4 text-right space-x-2">
+                  <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
+                  <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-bold text-white">The Apex 7800X3D</td>
+                <td class="p-4">RTX 4070 Super 12GB</td>
+                <td class="p-4 font-bold text-white">17,990 Dh</td>
+                <td class="p-4"><span class="text-emerald-400 font-bold">3 Units Available</span></td>
+                <td class="p-4 text-right space-x-2">
+                  <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
+                  <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-bold text-white">The Dominator 4090</td>
+                <td class="p-4">RTX 4090 24GB</td>
+                <td class="p-4 font-bold text-white">34,990 Dh</td>
+                <td class="p-4"><span class="text-amber-400 font-bold">Built to Order (0 In Stock)</span></td>
+                <td class="p-4 text-right space-x-2">
+                  <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
+                  <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-quotes" class="tab-content">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-black uppercase text-white">Custom Build Enquiries</h2>
+        </div>
+
+        <div id="quotes-list" class="space-y-4">
+          <div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-bold text-white">Liam Thorne</span>
+                <span class="text-xs text-gray-500 font-mono">liam.t@outlook.com</span>
+                <span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span>
+              </div>
+              <p class="text-xs font-mono text-gray-300">
+                <strong class="text-gray-500">Budget:</strong> 25,000 Dh - 40,000+ Dh &nbsp;|&nbsp;
+                <strong class="text-gray-500">Platform:</strong> Intel + NVIDIA
+              </p>
+              <div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">
+                "Looking for a clean liquid-cooled build in a Lian Li O11 Dynamic case. Primary focus is 4K Sim Racing (iRacing triple monitors) and rendering 4K video."
+              </div>
+            </div>
+
+            <div class="flex md:flex-col justify-end gap-2 min-w-[140px]">
+                <button onclick="quoteAction(this, 'Quote sent')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">
+                Send Quote PDF
+              </button>
+                <button onclick="quoteAction(this, 'Request archived')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">
+                Archive
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-bold text-white">Studio 44 Media</span>
+                <span class="text-xs text-gray-500 font-mono">contact@studio44.design</span>
+                <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded">REVIEWED</span>
+              </div>
+              <p class="text-xs font-mono text-gray-300">
+                <strong class="text-gray-500">Budget:</strong> 15,000 Dh - 25,000 Dh &nbsp;|&nbsp;
+                <strong class="text-gray-500">Platform:</strong> Full AMD (Ryzen + Radeon)
+              </p>
+              <div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">
+                "Need 2 identical workstation towers for video editing staff. Minimal RGB, high airflow, 64GB RAM minimum."
+              </div>
+            </div>
+
+            <div class="flex md:flex-col justify-end gap-2 min-w-[140px]">
+                <button onclick="quoteAction(this, 'Follow-up marked')" class="bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">
+                Follow Up
+              </button>
+                <button onclick="quoteAction(this, 'Request archived')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">
+                Archive
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <div id="action-modal" class="modal fixed inset-0 z-[60] items-center justify-center bg-black/70 px-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#161920] border border-gray-700 rounded p-6 md:p-8 shadow-2xl">
+        <div class="flex items-center justify-between mb-5">
+          <h2 id="modal-title" class="text-lg font-black uppercase text-white">Update</h2>
+          <button onclick="closeModal()" aria-label="Close dialog" class="text-gray-500 hover:text-white text-xl leading-none">&times;</button>
+        </div>
+        <div id="modal-fields" class="space-y-4"></div>
+        <div class="flex justify-end gap-3 mt-6">
+          <button onclick="closeModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Cancel</button>
+          <button id="modal-save" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-black py-4 border-t border-gray-900 text-center text-[10px] text-gray-600 font-mono">
+    <p>APEX RIGS INTERNAL BACKOFFICE ENGINE • SECURED CONNECTION</p>
+  </footer>
+
+  <script>
+    let modalSaveAction = null;
+
+    function switchTab(tabId) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.add('active');
+
+      const btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(b => {
+        b.classList.remove('bg-gray-800', 'text-white');
+      });
+
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn) activeBtn.classList.add('bg-gray-800', 'text-white');
+
+      filterDashboard();
+    }
+
+    function showModal(title, fields, saveAction) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-fields').innerHTML = fields;
+      modalSaveAction = saveAction;
+      document.getElementById('modal-save').onclick = function () {
+        if (modalSaveAction) modalSaveAction();
+      };
+      document.getElementById('action-modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('action-modal').classList.remove('open');
+      modalSaveAction = null;
+    }
+
+    function notify(message) {
+      const notice = document.createElement('div');
+      notice.className = 'fixed bottom-6 right-6 z-[70] bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded shadow-lg';
+      notice.textContent = message;
+      document.body.appendChild(notice);
+      setTimeout(() => notice.remove(), 2400);
+    }
+
+    function openOrderUpdate(button) {
+      const row = button.closest('tr');
+      const orderId = row.cells[0].textContent.trim();
+      const status = row.cells[5].querySelector('span');
+      showModal('Update ' + orderId, '<label class="block text-xs font-bold uppercase text-gray-400">Build Status<select id="order-status" class="mt-2 w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-2 text-xs text-white"><option>Stress Testing (FurMark)</option><option>Ready for Pickup</option><option>Parts Sourced / Assembling</option><option>Shipped</option></select></label>', function () {
+        status.textContent = document.getElementById('order-status').value;
+        closeModal();
+        notify(orderId + ' updated');
+      });
+      document.getElementById('order-status').value = status.textContent.trim();
+    }
+
+    function openManualOrder() {
+      const products = Array.from(document.querySelectorAll('#inventory-body tr')).map(row => ({ name: row.cells[0].textContent.trim(), price: row.cells[2].textContent.trim() }));
+      const productOptions = products.map(product => '<option value="' + product.name + '" data-price="' + product.price.replace(/[^0-9]/g, '') + '">' + product.name + ' - ' + product.price + '</option>').join('');
+      const paymentOptions = '<option>Cash on delivery</option><option>Card payment</option><option>Paid in full</option>';
+      showModal('Place New Order', '<div class="grid md:grid-cols-2 gap-5"><div class="space-y-4"><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Customer details</p><div class="grid gap-3"><input id="manual-customer" required placeholder="Full name *" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="manual-phone" required type="tel" placeholder="Mobile number *" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="manual-email" type="email" placeholder="Email address" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="manual-address" placeholder="Delivery address" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></div></div><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Order details</p><div class="grid gap-3"><select id="manual-product" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white">' + productOptions + '</select><div class="grid grid-cols-2 gap-3"><input id="manual-quantity" type="number" min="1" value="1" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><select id="manual-payment" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><option>Cash on delivery</option><option>Card payment</option><option>Bank transfer</option><option>Paid in full</option></select></div><select id="manual-status" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><option>New Order</option><option>Parts Sourced / Assembling</option><option>Stress Testing (FurMark)</option><option>Ready for Pickup</option></select></div></div></div><div class="bg-[#0f1115] border border-gray-800 rounded p-5"><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-4">Order summary</p><div class="flex justify-between text-xs text-gray-400 mb-3"><span>Selected system</span><span id="manual-summary-product" class="text-white text-right">' + (products[0] ? products[0].name : 'Custom system') + '</span></div><div class="flex justify-between text-xs text-gray-400 mb-3"><span>Quantity</span><span id="manual-summary-quantity" class="text-white">1</span></div><div class="border-t border-gray-800 pt-4 mt-5 flex justify-between"><span class="text-xs font-bold uppercase text-gray-400">Total</span><strong id="manual-total" class="text-xl font-black text-white">' + (products[0] ? products[0].price : 'Price on request') + '</strong></div><textarea id="manual-notes" rows="5" placeholder="Internal notes, requested delivery date, or customer preferences..." class="w-full mt-6 bg-[#161920] border border-gray-800 rounded px-3 py-3 text-xs text-white"></textarea></div></div>', function () {
+        const customer = document.getElementById('manual-customer').value.trim();
+        const phone = document.getElementById('manual-phone').value.trim();
+        if (!customer || !phone) {
+          notify('Name and mobile number are required');
+          return;
+        }
+        const system = document.getElementById('manual-product').value || 'Custom system';
+        const total = document.getElementById('manual-total').textContent;
+        const status = document.getElementById('manual-status').value;
+        const orderId = '#AR-' + Math.floor(9000 + Math.random() * 999);
+        document.querySelector('#tab-orders tbody').insertAdjacentHTML('afterbegin', '<tr><td class="p-4 font-bold text-white">' + orderId + '</td><td class="p-4">' + customer + '<br/><span class="text-gray-500 text-[10px]">' + (document.getElementById('manual-email').value.trim() || 'manual order') + '</span></td><td class="p-4 text-gray-300">' + phone + '</td><td class="p-4">' + system + '</td><td class="p-4 text-white font-bold">' + total + '</td><td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">' + status + '</span></td><td class="p-4 text-right"><button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button></td></tr>');
+        const savedOrders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+        savedOrders.unshift({ id: orderId, customer, phone, email: document.getElementById('manual-email').value.trim(), products: [{ name: system, quantity: Number(document.getElementById('manual-quantity').value) || 1 }], total: Number(total.replace(/[^0-9]/g, '')), status, createdAt: new Date().toISOString() });
+        localStorage.setItem('apex-rigs-orders', JSON.stringify(savedOrders));
+        updateOrderCount(1);
+        addOrderDeleteButtons();
+        notify('Manual order created for ' + customer);
+        closeModal();
+      });
+      Array.from(document.querySelectorAll('#manual-payment option')).find(option => option.textContent === 'Bank transfer')?.remove();
+      const updateOrderSummary = function () {
+        const product = document.getElementById('manual-product');
+        const quantity = Number(document.getElementById('manual-quantity').value) || 1;
+        const selected = product.options[product.selectedIndex];
+        const price = Number(selected.dataset.price || 0) * quantity;
+        document.getElementById('manual-summary-product').textContent = selected.textContent.split(' - ')[0];
+        document.getElementById('manual-summary-quantity').textContent = quantity;
+        document.getElementById('manual-total').textContent = price ? price.toLocaleString('en-US') + ' Dh' : 'Price on request';
+      };
+      document.getElementById('manual-product').addEventListener('change', updateOrderSummary);
+      document.getElementById('manual-quantity').addEventListener('input', updateOrderSummary);
+    }
+
+    function openInventoryEditor(button) {
+      if (!button) {
+        showModal('Add New Product', '<div class="grid md:grid-cols-2 gap-6"><div class="space-y-4"><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Product identity</p><div class="grid gap-3"><input id="inventory-name" placeholder="Product name *" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><select id="inventory-category" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><option>Gaming PC</option><option>Workstation</option><option>Custom Build</option><option>Carte graphique</option><option>Écran</option><option>Processeur</option><option>Carte mère</option><option>RAM</option><option>Stockage</option><option>Boîtier</option><option>Périphérique</option></select><textarea id="inventory-description" rows="3" placeholder="Short product description" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></textarea></div></div><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Pricing & availability</p><div class="grid grid-cols-2 gap-3"><input id="inventory-price" placeholder="Price in Dh *" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-stock" type="number" min="0" value="1" placeholder="Stock" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></div><label class="flex items-center gap-2 mt-3 text-xs text-gray-400"><input id="inventory-visible" type="checkbox" checked class="accent-red-600"> Visible on website</label></div></div><div class="space-y-4"><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Technical specifications</p><div class="grid gap-3"><input id="inventory-cpu" placeholder="CPU" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-gpu" placeholder="GPU" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-ram" placeholder="RAM" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-storage" placeholder="Storage" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></div></div><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Product media</p><input id="inventory-image" type="url" placeholder="Product image URL" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><div id="inventory-preview" class="mt-3 h-24 rounded border border-dashed border-gray-700 flex items-center justify-center text-xs text-gray-600">Image preview</div></div></div></div>', function () {
+          const name = document.getElementById('inventory-name').value.trim();
+          const price = document.getElementById('inventory-price').value.trim();
+          if (!name || !price) {
+            notify('Product name and price are required');
+            return;
+          }
+          const specs = ['CPU: ' + document.getElementById('inventory-cpu').value.trim(), 'GPU: ' + document.getElementById('inventory-gpu').value.trim(), 'RAM: ' + document.getElementById('inventory-ram').value.trim(), 'Storage: ' + document.getElementById('inventory-storage').value.trim()].filter(spec => !spec.endsWith(': ')).join(' | ') || 'Specifications pending';
+          const stockCount = Number(document.getElementById('inventory-stock').value) || 0;
+          const stockLabel = stockCount ? stockCount + ' Units Available' : 'Built to Order (0 In Stock)';
+          const escapedName = escapeHtml(name);
+          const escapedSpecs = escapeHtml(specs);
+          const escapedPrice = escapeHtml(price);
+          document.getElementById('inventory-body').insertAdjacentHTML('beforeend', '<tr><td class="p-4 font-bold text-white">' + escapedName + '</td><td class="p-4">' + escapedSpecs + '</td><td class="p-4 font-bold text-white">' + escapedPrice + '</td><td class="p-4"><span class="' + (stockCount ? 'text-emerald-400' : 'text-amber-400') + ' font-bold">' + stockLabel + '</span></td><td class="p-4 text-right space-x-2"><button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button><button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button><button onclick="deleteListing(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2 py-1 rounded">Delete</button></td></tr>');
+          const newRow = document.getElementById('inventory-body').lastElementChild;
+          newRow.dataset.category = document.getElementById('inventory-category').value;
+          newRow.dataset.description = document.getElementById('inventory-description').value.trim();
+          newRow.dataset.image = document.getElementById('inventory-image').dataset.imageData || '';
+          newRow.dataset.visible = document.getElementById('inventory-visible').checked;
+          newRow.dataset.featured = document.getElementById('inventory-featured').checked;
+          saveInventory();
+          notify(name + ' added to inventory');
+          closeModal();
+        });
+        const imageInput = document.getElementById('inventory-image');
+        imageInput.type = 'file';
+        imageInput.accept = 'image/png,image/jpeg,image/webp';
+        imageInput.removeAttribute('placeholder');
+        document.getElementById('inventory-visible').insertAdjacentHTML('afterend', '<label class="flex items-center gap-2 mt-3 text-xs text-gray-400"><input id="inventory-featured" type="checkbox" class="accent-red-600"> Featured product</label>');
+        imageInput.addEventListener('change', function () {
+          const preview = document.getElementById('inventory-preview');
+          const file = imageInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            imageInput.dataset.imageData = reader.result;
+            preview.innerHTML = '<img src="' + reader.result + '" alt="Product preview" class="w-full h-full object-cover rounded">';
+          };
+          reader.readAsDataURL(file);
+        });
+        return;
+      }
+      const row = button.closest('tr');
+      const name = row.cells[0].textContent.trim();
+      const specs = row.cells[1];
+      const price = row.cells[2];
+      const product = { name, price: price.textContent.trim(), specs: specs.textContent.trim(), category: row.dataset.category || 'Gaming PC', description: row.dataset.description || '', stock: row.cells[3].textContent.trim(), image: row.dataset.image || '', visible: row.dataset.visible !== 'false', featured: row.dataset.featured === 'true' };
+      const categories = ['Gaming PC', 'Workstation', 'Custom Build', 'Carte graphique', 'Écran', 'Processeur', 'Carte mère', 'RAM', 'Stockage', 'Boîtier', 'Périphérique'];
+      const categoryOptions = categories.map(category => '<option ' + (category === product.category ? 'selected' : '') + '>' + category + '</option>').join('');
+      const specParts = product.specs.split(' | ').reduce((values, spec) => { const separator = spec.indexOf(': '); if (separator > -1) values[spec.slice(0, separator).toLowerCase()] = spec.slice(separator + 2); return values; }, {});
+      showModal('Edit Product', '<div class="grid md:grid-cols-2 gap-6"><div class="space-y-4"><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Product identity</p><div class="grid gap-3"><input id="inventory-name" value="' + escapeHtml(product.name) + '" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><select id="inventory-category" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white">' + categoryOptions + '</select><textarea id="inventory-description" rows="3" placeholder="Short product description" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white">' + escapeHtml(product.description) + '</textarea></div></div><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Pricing & availability</p><div class="grid grid-cols-2 gap-3"><input id="inventory-price" value="' + escapeHtml(product.price) + '" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-stock" type="number" min="0" value="' + (parseInt(product.stock, 10) || 0) + '" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></div><label class="flex items-center gap-2 mt-3 text-xs text-gray-400"><input id="inventory-visible" type="checkbox" ' + (product.visible ? 'checked' : '') + ' class="accent-red-600"> Visible on website</label><label class="flex items-center gap-2 mt-3 text-xs text-gray-400"><input id="inventory-featured" type="checkbox" ' + (product.featured ? 'checked' : '') + ' class="accent-red-600"> Featured product</label></div></div><div class="space-y-4"><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Technical specifications</p><div class="grid gap-3"><input id="inventory-cpu" value="' + escapeHtml(specParts.cpu || '') + '" placeholder="CPU" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-gpu" value="' + escapeHtml(specParts.gpu || '') + '" placeholder="GPU" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-ram" value="' + escapeHtml(specParts.ram || '') + '" placeholder="RAM" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"><input id="inventory-storage" value="' + escapeHtml(specParts.storage || '') + '" placeholder="Storage" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-white"></div></div><div><p class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">Product media</p><input id="inventory-image" type="file" accept="image/png,image/jpeg,image/webp" class="w-full bg-[#0f1115] border border-gray-800 rounded px-3 py-3 text-xs text-gray-300"><div id="inventory-preview" class="mt-3 h-24 rounded border border-dashed border-gray-700 flex items-center justify-center text-xs text-gray-600">' + (product.image ? '<img src="' + escapeHtml(product.image) + '" alt="Product preview" class="w-full h-full object-cover rounded">' : 'Image preview') + '</div></div></div></div>', function () {
+        const updatedName = document.getElementById('inventory-name').value.trim() || product.name;
+        const updatedSpecs = ['CPU: ' + document.getElementById('inventory-cpu').value.trim(), 'GPU: ' + document.getElementById('inventory-gpu').value.trim(), 'RAM: ' + document.getElementById('inventory-ram').value.trim(), 'Storage: ' + document.getElementById('inventory-storage').value.trim()].filter(spec => !spec.endsWith(': ')).join(' | ') || 'Specifications pending';
+        const updatedStock = Number(document.getElementById('inventory-stock').value) || 0;
+        row.cells[0].textContent = updatedName;
+        row.cells[1].textContent = updatedSpecs;
+        price.textContent = document.getElementById('inventory-price').value.trim() || price.textContent;
+        row.cells[3].querySelector('span').textContent = updatedStock ? updatedStock + ' Units Available' : 'Built to Order (0 In Stock)';
+        row.cells[3].querySelector('span').className = updatedStock ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold';
+        row.dataset.category = document.getElementById('inventory-category').value;
+        row.dataset.description = document.getElementById('inventory-description').value.trim();
+        row.dataset.visible = document.getElementById('inventory-visible').checked;
+        row.dataset.featured = document.getElementById('inventory-featured').checked;
+        const fileImage = document.getElementById('inventory-image').dataset.imageData;
+        if (fileImage) row.dataset.image = fileImage;
+        saveInventory();
+        closeModal();
+        notify(updatedName + ' updated');
+      });
+      const imageInput = document.getElementById('inventory-image');
+      imageInput.addEventListener('change', function () {
+        const file = imageInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => { imageInput.dataset.imageData = reader.result; document.getElementById('inventory-preview').innerHTML = '<img src="' + reader.result + '" alt="Product preview" class="w-full h-full object-cover rounded">'; };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function toggleInventory(button) {
+      const row = button.closest('tr');
+      const stock = row.cells[3].querySelector('span');
+      const disabled = button.textContent.trim() === 'Enable';
+      button.textContent = disabled ? 'Disable' : 'Enable';
+      button.className = disabled ? 'bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded' : 'bg-emerald-950 hover:bg-emerald-900 text-emerald-400 px-2 py-1 rounded';
+      stock.textContent = disabled ? '5 Units Available' : 'Disabled';
+      stock.className = disabled ? 'text-emerald-400 font-bold' : 'text-gray-500 font-bold';
+      saveInventory();
+      notify(disabled ? 'System enabled' : 'System disabled');
+    }
+
+    function deleteListing(button) {
+      const row = button.closest('tr');
+      const name = row.cells[0].textContent.trim();
+      if (!confirm('Delete ' + name + '?')) return;
+      row.remove();
+      saveInventory();
+      notify(name + ' deleted');
+    }
+
+    function addInventoryDeleteButtons() {
+      document.querySelectorAll('#inventory-body tr').forEach(row => {
+        const actions = row.cells[4];
+        if (actions && !actions.querySelector('[data-delete-listing]')) actions.insertAdjacentHTML('beforeend', '<button data-delete-listing onclick="deleteListing(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2 py-1 rounded">Delete</button>');
+      });
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character]));
+    }
+
+    function saveInventory() {
+      const products = Array.from(document.querySelectorAll('#inventory-body tr')).map(row => ({
+        name: row.cells[0].textContent.trim(),
+        specs: row.cells[1].textContent.trim(),
+        price: row.cells[2].textContent.trim(),
+        stock: row.cells[3].textContent.trim(),
+        disabled: row.cells[4].querySelector('button:last-child').textContent.trim() === 'Enable',
+        category: row.dataset.category || 'Gaming PC',
+        description: row.dataset.description || '',
+        image: row.dataset.image || '',
+        visible: row.dataset.visible !== 'false',
+        featured: row.dataset.featured === 'true'
+      }));
+      localStorage.setItem('apex-rigs-inventory', JSON.stringify(products));
+    }
+
+    function normalizePrice(price) {
+      if (!price.includes('$')) return price;
+      const amount = Number(price.replace(/[^0-9.]/g, ''));
+      return amount ? Math.round(amount * 10).toLocaleString('en-US') + ' Dh' : price.replace('$', '');
+    }
+
+    function restoreInventory() {
+      const stored = JSON.parse(localStorage.getItem('apex-rigs-inventory') || 'null');
+      if (!stored) {
+        saveInventory();
+        return;
+      }
+      stored.forEach(product => product.price = normalizePrice(product.price));
+      document.getElementById('inventory-body').innerHTML = stored.map(product => '<tr><td class="p-4 font-bold text-white">' + product.name + '</td><td class="p-4">' + product.specs + '</td><td class="p-4 font-bold text-white">' + product.price + '</td><td class="p-4"><span class="' + (product.disabled ? 'text-gray-500' : 'text-emerald-400') + ' font-bold">' + product.stock + '</span></td><td class="p-4 text-right space-x-2"><button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button><button onclick="toggleInventory(this)" class="' + (product.disabled ? 'bg-emerald-950 hover:bg-emerald-900 text-emerald-400' : 'bg-red-950 hover:bg-red-900 text-red-400') + ' px-2 py-1 rounded">' + (product.disabled ? 'Enable' : 'Disable') + '</button></td></tr>').join('');
+      stored.forEach((product, index) => {
+        const row = document.getElementById('inventory-body').children[index];
+        row.dataset.category = product.category || 'Gaming PC';
+        row.dataset.description = product.description || '';
+        row.dataset.image = product.image || '';
+        row.dataset.visible = product.visible !== false;
+        row.dataset.featured = product.featured === true;
+      });
+      saveInventory();
+    }
+
+    function updateOrderCount(increment) {
+      const orderButton = document.getElementById('tab-btn-orders');
+      const count = Number(orderButton.textContent.match(/\d+/)[0]) + increment;
+      orderButton.textContent = 'Orders (' + count + ')';
+    }
+
+    function addOrderDeleteButtons() {
+      document.querySelectorAll('#tab-orders tbody tr').forEach(row => {
+        const actions = row.cells[6];
+        if (actions && !actions.querySelector('[data-delete-order]')) actions.insertAdjacentHTML('beforeend', '<button data-delete-order onclick="deleteOrder(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1 rounded text-[10px] font-bold uppercase ml-2">Delete</button>');
+      });
+    }
+
+    function restoreCustomerOrders() {
+      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+      const body = document.querySelector('#tab-orders tbody');
+      orders.reverse().forEach(order => {
+        if ([...body.rows].some(row => row.cells[0].textContent.trim() === order.id)) return;
+        const products = order.products.map(item => item.name + ' × ' + item.quantity).join(', ');
+        body.insertAdjacentHTML('afterbegin', '<tr><td class="p-4 font-bold text-white">' + escapeHtml(order.id) + '</td><td class="p-4">' + escapeHtml(order.customer) + '<br/><span class="text-gray-500 text-[10px]">' + escapeHtml(order.email || 'online order') + '</span></td><td class="p-4 text-gray-300">' + escapeHtml(order.phone) + '</td><td class="p-4">' + escapeHtml(products) + '</td><td class="p-4 text-white font-bold">' + order.total.toLocaleString('fr-FR') + ' Dh</td><td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">' + escapeHtml(order.status) + '</span></td><td class="p-4 text-right"><button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button></td></tr>');
+      });
+      if (orders.length) updateOrderCount(orders.length);
+      document.querySelectorAll('#tab-orders tbody tr').forEach(row => {
+        if (!row.querySelector('[data-delete-order]')) row.cells[6].insertAdjacentHTML('beforeend', '<button data-delete-order onclick="deleteOrder(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1 rounded text-[10px] font-bold uppercase ml-2">Delete</button>');
+      });
+    }
+
+    function deleteOrder(button) {
+      const row = button.closest('tr');
+      const id = row.cells[0].textContent.trim();
+      if (!confirm('Delete order ' + id + '?')) return;
+      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]').filter(order => order.id !== id);
+      localStorage.setItem('apex-rigs-orders', JSON.stringify(orders));
+      row.remove();
+      notify(id + ' deleted');
+    }
+
+    function restoreCustomerQuotes() {
+      const quotes = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
+      const list = document.getElementById('quotes-list');
+      quotes.reverse().forEach(quote => {
+        list.insertAdjacentHTML('afterbegin', '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name) + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email) + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform) + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>');
+      });
+    }
+
+    function updateOverviewFromStorage() {
+      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+      const revenue = 184500 + orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+      document.querySelector('#overview-revenue').textContent = revenue.toLocaleString('fr-FR') + ' Dh';
+      document.querySelector('#tab-btn-orders').textContent = 'Orders (' + (3 + orders.length) + ')';
+    }
+
+    function updateRevenuePeriod() {
+      const values = { 'This month': '184,500 Dh', 'Last month': '163,700 Dh', 'This quarter': '512,900 Dh' };
+      document.getElementById('overview-revenue').textContent = values[document.getElementById('revenue-period').value];
+    }
+
+    function quoteAction(button, message) {
+      const card = button.closest('.bg-\[\#161920\]');
+      const badge = card.querySelector('.text-\[10px\]');
+      if (message === 'Request archived') card.remove();
+      else if (badge) {
+        badge.textContent = message.toUpperCase();
+        badge.className = 'bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded';
+      }
+      notify(message);
+    }
+
+    function filterDashboard() {
+      const query = document.getElementById('dashboard-search').value.toLowerCase().trim();
+      const activeTab = document.querySelector('.tab-content.active');
+      if (!activeTab) return;
+      activeTab.querySelectorAll('tbody tr, .space-y-4 > div').forEach(item => {
+        item.hidden = query && !item.textContent.toLowerCase().includes(query);
+      });
+    }
+
+    document.getElementById('dashboard-search').addEventListener('input', filterDashboard);
+    document.getElementById('action-modal').addEventListener('click', function (event) {
+      if (event.target === this) closeModal();
+    });
+    restoreInventory();
+    addInventoryDeleteButtons();
+    restoreCustomerOrders();
+    addOrderDeleteButtons();
+    restoreCustomerQuotes();
+    updateOverviewFromStorage();
+    window.addEventListener('storage', event => {
+      if (event.key === 'apex-rigs-inventory') {
+        restoreInventory();
+        addInventoryDeleteButtons();
+      }
+      if (event.key === 'apex-rigs-orders') {
+        restoreCustomerOrders();
+        addOrderDeleteButtons();
+        updateOverviewFromStorage();
+      }
+      if (event.key === 'apex-rigs-quotes') restoreCustomerQuotes();
+    });
+  </script>
+
+</body>
+</html>
