@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="APEX RIGS - Custom Gaming PCs & Workstations assembled in Morocco">
+  <meta name="theme-color" content="#0f1115">
   <title>APEX RIGS | Custom Gaming PCs & Workstations</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23ef2b2d'>⚡</text></svg>">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     .page-section { display: none; }
@@ -16,28 +19,31 @@
     .page-section.active { animation: page-enter 240ms ease-out; }
     @keyframes page-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     :root { --ink: #0b1018; --surface: #121a26; --surface-raised: #182334; --paper: #f4f6f8; --muted: #8d9aad; --red: #ef2b2d; --cyan: #41d6c3; }
-    body.storefront { background: var(--ink) !important; color: #f8fafc; }
-    .storefront > div:first-child > div:first-child { background: #080c12; border-color: #202b3a; color: #aab6c5; }
-    .storefront header { background: var(--surface) !important; border-color: #253246 !important; box-shadow: 0 8px 30px rgba(0,0,0,.16); }
+    body.storefront { background: linear-gradient(180deg, #0b1017 0%, #0f1722 100%) !important; color: #f8fafc; }
+    html { scroll-behavior: smooth; }
+    .storefront > div:first-child > div:first-child { background: #090d14; border-color: #1f2a37; color: #b9c3cf; letter-spacing: 0.12em; }
+    .storefront header { background: rgba(18, 26, 38, 0.96) !important; backdrop-filter: blur(12px); border-color: rgba(76, 97, 125, 0.5) !important; box-shadow: 0 12px 30px rgba(0,0,0,.22); }
     .storefront header button { color: #e9eef5; }
     .storefront header button:hover { color: #ff5a5d; }
-    .storefront header label { background: #0b111b !important; border-color: #2a384d !important; }
+    .storefront header label { background: rgba(11,17,27,.9) !important; border-color: rgba(76, 97, 125, 0.6) !important; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); }
     .storefront header label input { color: #f8fafc; }
-    .storefront header nav { background: #0d141f !important; border-top: 1px solid #253246; }
-    .storefront header nav button { color: #c7d0dc; }
-    .storefront header nav button:hover { color: #ff686a; }
-    .storefront header nav #nav-gaming { background: var(--red); color: white; }
-    .storefront #page-gaming > section:first-child { background: radial-gradient(circle at 82% 25%, #273b58 0, #131d2c 35%, var(--ink) 72%) !important; border-color: #253246 !important; }
-    .storefront #page-gaming > section:first-child h1 { color: #f8fafc; }
+    .storefront header nav { background: rgba(13,20,31,0.94) !important; border-top: 1px solid rgba(76, 97, 125, 0.45); }
+    .storefront header nav button { color: #c7d0dc; border-radius: 999px; padding: 0 14px; }
+    .storefront header nav button:hover { color: #ff686a; background: rgba(255,255,255,0.03); }
+    .storefront header nav #nav-gaming { background: linear-gradient(135deg, #ef2b2d 0%, #ff5f62 100%); color: white; box-shadow: 0 8px 18px rgba(239,43,45,.34); }
+    .storefront .nav-btn { border: 1px solid transparent; }
+    .storefront .nav-btn.active, .storefront .nav-btn[aria-current="page"] { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+    .storefront #page-gaming > section:first-child { background: radial-gradient(circle at 82% 25%, rgba(62,86,120,0.92) 0%, rgba(19,29,44,0.96) 34%, #0b1017 72%) !important; border-color: rgba(76, 97, 125, 0.6) !important; }
+    .storefront #page-gaming > section:first-child h1 { color: #f8fafc; text-shadow: 0 10px 28px rgba(0,0,0,.25); }
     .storefront #page-gaming > section:first-child p { color: #aab6c5; }
-    .storefront #page-gaming > section:first-child .border-\[\#10151c\] { border-color: #5d6b7f; color: #f8fafc; }
-    .storefront #page-gaming > section:nth-child(2) { background: var(--surface) !important; border-color: #253246 !important; }
+    .storefront #page-gaming > section:first-child .border-\[\#10151c\] { border-color: rgba(140, 164, 190, 0.7); color: #f8fafc; background: rgba(15,23,33,.6); }
+    .storefront #page-gaming > section:nth-child(2) { background: linear-gradient(180deg, rgba(18,26,38,1) 0%, rgba(14,20,29,1) 100%) !important; border-color: rgba(76, 97, 125, 0.6) !important; }
     .storefront #page-gaming > section:nth-child(2) h2 { color: #f8fafc; }
-    .storefront #page-gaming > section:nth-child(2) .bg-\[\#f4f5f6\] { background: var(--surface-raised) !important; border-color: #2a384d !important; }
+    .storefront #page-gaming > section:nth-child(2) .bg-\[\#f4f5f6\] { background: rgba(24,35,52,0.9) !important; border-color: rgba(76, 97, 125, 0.8) !important; }
     .storefront #page-gaming > section:nth-child(2) .text-\[\#10151c\] { color: #f8fafc; }
-    .storefront #prebuilts { background: var(--ink); }
-    .storefront #prebuilts .catalog-product { background: var(--surface); border-color: #26354a; box-shadow: 0 12px 28px rgba(0,0,0,.18); }
-    .storefront #prebuilts .catalog-product:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: 0 16px 34px rgba(0,0,0,.28); }
+    .storefront #prebuilts { background: linear-gradient(180deg, rgba(11,16,23,1) 0%, rgba(9,13,19,1) 100%); }
+    .storefront #prebuilts .catalog-product { background: linear-gradient(180deg, rgba(22,25,32,1) 0%, rgba(16,21,28,1) 100%); border-color: rgba(76, 97, 125, 0.7); box-shadow: 0 15px 35px rgba(0,0,0,.18); }
+    .storefront #prebuilts .catalog-product:hover { border-color: rgba(239,43,45,0.9); transform: translateY(-4px); box-shadow: 0 18px 38px rgba(0,0,0,.3); }
     .storefront #prebuilts .text-gray-400 { color: #9eacbd; }
     .storefront #prebuilts .text-gray-500 { color: #74849a; }
     .storefront #prebuilts .text-gray-200 { color: #e7edf5; }
@@ -101,28 +107,27 @@
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-6 h-[76px] flex items-center justify-between gap-6">
         <div class="flex items-center gap-8 shrink-0">
-          <button onclick="switchPage('gaming')" class="text-2xl font-black tracking-tighter text-[#10151c] uppercase text-left">
+          <button data-page="gaming" class="text-2xl font-black tracking-tighter text-[#10151c] uppercase text-left">
             APEX<span class="text-red-600">RIGS</span>
           </button>
         </div>
         <label class="flex min-w-0 flex-1 max-w-xl items-center bg-gray-100 border border-gray-200 rounded-full px-4 sm:px-5 py-3 gap-3">
-          <span class="text-gray-400" aria-hidden="true">⌕</span><input id="catalog-search" type="search" placeholder="Rechercher dans le catalogue" aria-label="Rechercher dans le catalogue" class="bg-transparent outline-none text-xs sm:text-sm text-gray-800 w-full placeholder:text-gray-400">
+          <span class="text-gray-400" aria-hidden="true">⌕</span><input id="catalog-search" type="search" placeholder="Search catalog" aria-label="Search products" class="bg-transparent outline-none text-xs sm:text-sm text-gray-800 w-full placeholder:text-gray-400">
         </label>
         <div class="flex items-center gap-4 text-[#10151c]">
-          <button onclick="switchPage('support')" class="hidden lg:block text-xs font-bold uppercase">Aide</button>
+          <button data-page="support" class="hidden lg:block text-xs font-bold uppercase hover:text-red-600">Help</button>
           <div class="flex items-center gap-1 rounded border border-gray-600 p-1"><button id="lang-en" onclick="setLanguage('en')" class="px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded">EN</button><button id="lang-fr" onclick="setLanguage('fr')" class="px-2 py-1 text-[10px] font-black text-gray-300 rounded">FR</button></div>
-          <button onclick="showCartMessage()" class="relative text-xs font-bold uppercase whitespace-nowrap">Panier <span id="cart-count" class="ml-1 inline-flex items-center justify-center rounded-full bg-red-600 text-white w-5 h-5">0</span></button>
+          <button onclick="showCart()" class="relative text-xs font-bold uppercase whitespace-nowrap hover:text-red-600">Cart <span id="cart-count" class="ml-1 inline-flex items-center justify-center rounded-full bg-red-600 text-white w-5 h-5">0</span></button>
         </div>
       </div>
       <nav class="bg-[#10151c] text-white">
         <div class="max-w-7xl mx-auto px-6 h-12 flex items-center gap-7 overflow-x-auto whitespace-nowrap text-[11px] font-bold uppercase tracking-wide">
-          <button onclick="switchPage('gaming')" id="nav-gaming" class="nav-btn bg-red-600 px-4 h-full">Tous nos produits</button>
-          <button onclick="showCatalogCategory('Gaming PC')" class="hover:text-red-400 transition">PC Gamer</button>
-          <button onclick="switchPage('workstations')" id="nav-workstations" class="nav-btn hover:text-red-400 transition">Workstations</button>
-          <button onclick="switchPage('builder')" id="nav-builder" class="nav-btn hover:text-red-400 transition">Configurateur PC</button>
-          <button onclick="toggleComponentMenu()" aria-expanded="false" aria-controls="component-menu" class="component-trigger hover:text-red-400 transition h-full"><i data-lucide="menu" aria-hidden="true"></i><span>Composants</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
-          <button onclick="showCatalogCategory('Périphérique')" class="hover:text-red-400 transition">Périphériques</button>
-          <button onclick="switchPage('support')" id="nav-support" class="nav-btn hover:text-red-400 transition">Support</button>
+          <button data-page="gaming" id="nav-gaming" class="nav-btn bg-red-600 px-4 h-full">All Products</button>
+          <button onclick="showCatalogCategory('Gaming PC')" class="hover:text-red-400 transition">Gaming PC</button>
+          <button data-page="workstations" id="nav-workstations" class="nav-btn hover:text-red-400 transition">Workstations</button>
+          <button data-page="builder" id="nav-builder" class="nav-btn hover:text-red-400 transition">PC Builder</button>
+          <button onclick="toggleComponentMenu()" aria-expanded="false" aria-controls="component-menu" class="component-trigger hover:text-red-400 transition h-full"><i data-lucide="menu" aria-hidden="true"></i><span>Components</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+          <button data-page="support" id="nav-support" class="nav-btn hover:text-red-400 transition">Support</button>
         </div>
       </nav>
     </header>
@@ -130,16 +135,14 @@
     <div id="component-menu" class="hidden fixed inset-0 z-[55] bg-black/70" onclick="closeComponentMenu(event)">
       <div class="component-mega absolute left-0 top-[132px] w-full bg-[#121a26] border-b border-gray-700 shadow-2xl" onclick="event.stopPropagation()">
         <div class="max-w-7xl mx-auto px-6 py-6"><div class="flex items-start justify-between mb-5"><div><span class="text-[10px] uppercase tracking-[0.2em] text-red-400 font-black">Build your setup</span><h2 class="text-xl font-black text-white uppercase mt-1">PC Components</h2></div><button onclick="closeComponentMenu()" aria-label="Close components menu" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button></div><div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-          <button onclick="showCatalogCategory('Processeur')" class="component-link"><i data-lucide="cpu"></i><span>Processeur</span></button>
-          <button onclick="showCatalogCategory('Carte graphique')" class="component-link"><i data-lucide="gpu"></i><span>GPU</span></button>
-          <button onclick="showCatalogCategory('RAM')" class="component-link"><i data-lucide="memory-stick"></i><span>RAM</span></button>
-          <button onclick="showCatalogCategory('Écran')" class="component-link"><i data-lucide="monitor"></i><span>Écrans</span></button>
-          <button onclick="showCatalogCategory('Carte mère')" class="component-link"><i data-lucide="circuit-board"></i><span>Cartes mères</span></button>
-          <button onclick="showCatalogCategory('Stockage')" class="component-link"><i data-lucide="hard-drive"></i><span>Stockage</span></button>
-          <button onclick="showCatalogCategory('Boîtier')" class="component-link"><i data-lucide="box"></i><span>Boîtiers</span></button>
-          <button onclick="showCatalogCategory('Périphérique')" class="component-link"><i data-lucide="keyboard"></i><span>Périphériques</span></button>
+          <button onclick="showCatalogCategory('Processor')" class="component-link"><i data-lucide="cpu"></i><span>CPU</span></button>
+          <button onclick="showCatalogCategory('Graphics Card')" class="component-link"><i data-lucide="gpu"></i><span>GPU</span></button>
+          <button onclick="showCatalogCategory('Memory')" class="component-link"><i data-lucide="memory-stick"></i><span>RAM</span></button>
+          <button onclick="showCatalogCategory('Monitor')" class="component-link"><i data-lucide="monitor"></i><span>Displays</span></button>
+          <button onclick="showCatalogCategory('Motherboard')" class="component-link"><i data-lucide="circuit-board"></i><span>Mobos</span></button>
+          <button onclick="showCatalogCategory('Storage')" class="component-link"><i data-lucide="hard-drive"></i><span>Storage</span></button>
+          <button onclick="showCatalogCategory('Case')" class="component-link"><i data-lucide="box"></i><span>Cases</span></button>
         </div></div>
-        </div>
       </div>
     </div>
 
@@ -150,18 +153,18 @@
             <span class="inline-flex items-center gap-2 text-red-600 text-xs font-black uppercase tracking-widest mb-4"><span class="w-2 h-2 rounded-full bg-red-600"></span> Performance series 2026</span>
             <h1 class="text-4xl md:text-6xl font-black text-[#10151c] tracking-tight leading-[0.95] uppercase">The gaming PC that fits you.</h1>
             <p class="text-gray-600 mt-5 max-w-lg text-sm md:text-base leading-relaxed">Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.</p>
-            <div class="mt-7 flex flex-wrap gap-3"><a href="#prebuilts" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Voir les PC Gamer</a><button onclick="switchPage('builder')" class="border border-[#10151c] text-[#10151c] hover:bg-[#10151c] hover:text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Configurer mon PC</button></div>
-            <div class="mt-8 flex gap-6 text-xs font-bold uppercase text-gray-500"><span>✓ Garantie 2 ans</span><span>✓ Testé 24h</span></div>
+            <div class="mt-7 flex flex-wrap gap-3"><a href="#prebuilts" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Shop Gaming PCs</a><button onclick="switchPage('builder')" class="border border-[#10151c] text-[#10151c] hover:bg-[#10151c] hover:text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Build My PC</button></div>
+            <div class="mt-8 flex gap-6 text-xs font-bold uppercase text-gray-500"><span>✓ 2-year warranty</span><span>✓ 24h tested</span></div>
           </div>
-          <div class="order-1 md:order-2 h-64 md:h-[350px] rounded overflow-hidden relative bg-[#10151c]"><img src="https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="PC gaming APEX RIGS" class="w-full h-full object-cover"><div class="absolute bottom-4 left-4 bg-white px-4 py-3 rounded"><span class="block text-[10px] uppercase font-bold text-gray-500">À partir de</span><strong class="text-xl text-[#10151c]">9,990 Dh</strong></div></div>
+          <div class="order-1 md:order-2 h-64 md:h-[350px] rounded overflow-hidden relative bg-[#10151c]"><img src="https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.0.0" alt="Gaming PC" class="w-full h-full object-cover"><div class="absolute bottom-4 left-4 bg-white px-4 py-3 rounded"><span class="block text-[10px] uppercase font-bold text-gray-500">Starting from</span><strong class="text-xl text-[#10151c]">9,990 Dh</strong></div></div>
         </div>
       </section>
 
       <section class="bg-[#f4f6f8] py-8 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-4"><div><span class="text-red-600 text-[10px] font-black uppercase tracking-widest">Explore the store</span><h2 class="text-2xl font-black text-[#10151c] uppercase mt-1">Our Categories</h2></div><span class="text-xs text-gray-500 hidden sm:block">PC components and builds</span></div><div class="relative bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6"><button onclick="scrollCategories(-1)" aria-label="Previous categories" class="category-arrow left-2">‹</button><div id="category-track" class="flex gap-3 md:gap-6 overflow-hidden px-8"><button onclick="showCatalogCategory('Carte graphique')" class="category-tile"><span class="category-art bg-red-50"><i data-lucide="gpu"></i></span><strong>GPU</strong><span>Graphics cards</span></button><button onclick="showCatalogCategory('Écran')" class="category-tile"><span class="category-art bg-blue-50"><i data-lucide="monitor"></i></span><strong>Displays</strong><span>Gaming monitors</span></button><button onclick="showCatalogCategory('Processeur')" class="category-tile"><span class="category-art bg-amber-50"><i data-lucide="cpu"></i></span><strong>CPU</strong><span>Processors</span></button><button onclick="showCatalogCategory('RAM')" class="category-tile"><span class="category-art bg-emerald-50"><i data-lucide="memory-stick"></i></span><strong>RAM</strong><span>Memory kits</span></button><button onclick="showCatalogCategory('Carte mère')" class="category-tile"><span class="category-art bg-violet-50"><i data-lucide="circuit-board"></i></span><strong>Motherboards</strong><span>Build platforms</span></button><button onclick="showCatalogCategory('Stockage')" class="category-tile"><span class="category-art bg-cyan-50"><i data-lucide="hard-drive"></i></span><strong>Storage</strong><span>SSD and NVMe</span></button><button onclick="showCatalogCategory('Boîtier')" class="category-tile"><span class="category-art bg-slate-100"><i data-lucide="box"></i></span><strong>Cases</strong><span>Gaming cases</span></button></div><button onclick="scrollCategories(1)" aria-label="Next categories" class="category-arrow right-2">›</button></div></div>
+        <div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-4"><div><span class="text-red-600 text-[10px] font-black uppercase tracking-widest">Explore the store</span><h2 class="text-2xl font-black text-[#10151c] uppercase mt-1">Our Categories</h2></div><span class="text-xs text-gray-500 hidden sm:block">PC components and builds</span></div><div class="relative bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6"><button onclick="scrollCategories(-1)" aria-label="Previous categories" class="category-arrow left-2">‹</button><div id="category-track" class="flex gap-3 md:gap-6 overflow-hidden px-8"><button onclick="showCatalogCategory('Graphics Card')" class="category-tile"><span class="category-art bg-red-50"><i data-lucide="gpu"></i></span><strong>GPU</strong><span>Graphics cards</span></button><button onclick="showCatalogCategory('Monitor')" class="category-tile"><span class="category-art bg-blue-50"><i data-lucide="monitor"></i></span><strong>Displays</strong><span>Gaming monitors</span></button><button onclick="showCatalogCategory('Processor')" class="category-tile"><span class="category-art bg-amber-50"><i data-lucide="cpu"></i></span><strong>CPU</strong><span>Processors</span></button><button onclick="showCatalogCategory('Memory')" class="category-tile"><span class="category-art bg-emerald-50"><i data-lucide="memory-stick"></i></span><strong>RAM</strong><span>Memory kits</span></button><button onclick="showCatalogCategory('Motherboard')" class="category-tile"><span class="category-art bg-violet-50"><i data-lucide="circuit-board"></i></span><strong>Motherboards</strong><span>Build platforms</span></button><button onclick="showCatalogCategory('Storage')" class="category-tile"><span class="category-art bg-cyan-50"><i data-lucide="hard-drive"></i></span><strong>Storage</strong><span>SSD and NVMe</span></button><button onclick="showCatalogCategory('Case')" class="category-tile"><span class="category-art bg-slate-100"><i data-lucide="box"></i></span><strong>Cases</strong><span>PC chassis</span></button></div><button onclick="scrollCategories(1)" aria-label="Next categories" class="category-arrow right-2">›</button></div></div>
       </section>
 
-      <section id="featured-section" class="bg-[#10151c] py-10 hidden"><div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-5"><div><span class="text-red-400 text-[10px] font-black uppercase tracking-widest">APEX SELECTION</span><h2 class="text-2xl font-black text-white uppercase mt-1">Featured Products</h2></div><span class="text-xs text-gray-400">Our team’s top picks</span></div><div id="featured-products" class="grid md:grid-cols-3 gap-5"></div></div></section>
+      <section id="featured-section" class="bg-[#10151c] py-10 hidden"><div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-5"><div><span class="text-red-400 text-[10px] font-black uppercase tracking-widest">APEX SELECTION</span><h2 class="text-2xl font-black text-white uppercase mt-1">Featured Products</h2></div><span class="text-xs text-gray-400">Our team's top picks</span></div><div id="featured-products" class="grid md:grid-cols-3 gap-5"></div></div></section>
 
       <section id="prebuilts" class="py-16 max-w-7xl mx-auto px-6">
         <div class="mb-8">
@@ -177,7 +180,7 @@
                 <span class="text-xs font-bold text-emerald-400">Ships in 24 Hours</span>
               </div>
               <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-                <img src="WhitePC1.png" alt="Gaming PC" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1614151271479-a1e010e6f2fa?q=80&w=600" alt="The Vector i5 Gaming PC" class="w-full h-full object-cover">
               </div>
               <h3 class="text-lg font-extrabold uppercase text-white">The Vector i5</h3>
               <p class="text-xs text-gray-400 mt-1 mb-4">Targeted for 1080p Esports & High-FPS Gaming</p>
@@ -190,7 +193,7 @@
             </div>
             <div class="p-6 pt-0 flex items-center justify-between">
               <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">9,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Vector i5', 9990)" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Ajouter au panier</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Configurer</button></div>
+              <div class="flex gap-2"><button onclick="addToCart('The Vector i5')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
             </div>
           </div>
 
@@ -202,7 +205,7 @@
                 <span class="text-xs font-bold text-emerald-400">Ships in 24 Hours</span>
               </div>
               <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-                <img src="image.png" alt="The Apex 7800X3D" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1595225476933-018acacda63d?q=80&w=600" alt="The Apex 7800X3D Gaming PC" class="w-full h-full object-cover">
               </div>
               <h3 class="text-lg font-extrabold uppercase text-white">The Apex 7800X3D</h3>
               <p class="text-xs text-gray-400 mt-1 mb-4">Optimized for 1440p Ultra Settings & Streaming</p>
@@ -215,7 +218,7 @@
             </div>
             <div class="p-6 pt-0 flex items-center justify-between">
               <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">17,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Apex 7800X3D', 17990)" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Ajouter au panier</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Configurer</button></div>
+              <div class="flex gap-2"><button onclick="addToCart('The Apex 7800X3D')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
             </div>
           </div>
 
@@ -226,7 +229,7 @@
                 <span class="text-xs font-bold text-gray-400">3-Day Custom Lead</span>
               </div>
               <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-               <img src="https://i.pinimg.com/736x/28/d7/07/28d7079a65186eb90873ede6ddda9715.jpg" alt="The Dominator 4090" class="w-full h-full object-cover">
+               <img src="https://images.unsplash.com/photo-1587289882938-66160cf22dcb?q=80&w=600" alt="The Dominator 4090 Gaming PC" class="w-full h-full object-cover">
               </div>
               <h3 class="text-lg font-extrabold uppercase text-white">The Dominator 4090</h3>
               <p class="text-xs text-gray-400 mt-1 mb-4">Uncompromised 4K Gaming & Workstation Power</p>
@@ -239,14 +242,14 @@
             </div>
             <div class="p-6 pt-0 flex items-center justify-between">
               <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">34,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Dominator 4090', 34990)" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Ajouter au panier</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Configurer</button></div>
+              <div class="flex gap-2"><button onclick="addToCart('The Dominator 4090')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
             </div>
           </div>
         </div>
         <div id="dynamic-products" class="grid md:grid-cols-3 gap-6 mt-6"></div>
         <div id="catalog-empty" class="catalog-empty text-center border border-dashed border-gray-700 rounded py-12 mt-6">
-          <p class="text-lg font-black uppercase text-white">Aucun produit trouvé</p>
-          <p class="text-xs text-gray-500 mt-2">Essayez une autre recherche comme “RTX”, “AMD” ou “gaming”.</p>
+          <p class="text-lg font-black uppercase text-white">No products found</p>
+          <p class="text-xs text-gray-500 mt-2">Try another search like "RTX", "AMD" or "gaming".</p>
         </div>
       </section>
     </main>
@@ -270,7 +273,7 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-2xl font-black text-white">48,990 Dh</span>
-              <button onclick="openQuoteRequest('Threadripper Studio Pro')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Request Workstation Quote</button>
+              <button onclick="openQuoteRequest('Threadripper Studio Pro')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Request Quote</button>
             </div>
           </div>
 
@@ -285,7 +288,7 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-2xl font-black text-white">29,990 Dh</span>
-              <button onclick="openQuoteRequest('Creator Studio i9')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Request Workstation Quote</button>
+              <button onclick="openQuoteRequest('Creator Studio i9')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Request Quote</button>
             </div>
           </div>
         </div>
@@ -301,31 +304,31 @@
           <form id="quote-form" class="space-y-4">
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Full Name</label>
-                <input id="quote-name" type="text" placeholder="Alex Mercer" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-name">Full Name</label>
+                <input id="quote-name" type="text" placeholder="Your name" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
               </div>
               <div>
-                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Email Address</label>
-                <input type="email" placeholder="alex@example.com" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-email">Email Address</label>
+                <input id="quote-email" type="email" placeholder="your@email.com" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
               </div>
               <div>
-                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mobile Number</label>
-                <input type="tel" placeholder="+212 6 12 34 56 78" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-phone">Mobile Number</label>
+                <input id="quote-phone" type="tel" placeholder="+212 6 12 34 56 78" required class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600">
               </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Target Budget</label>
-                <select class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-gray-300 focus:outline-none focus:border-red-600">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-budget">Target Budget</label>
+                <select id="quote-budget" class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-gray-300 focus:outline-none focus:border-red-600">
                   <option>10,000 Dh - 15,000 Dh</option>
                   <option>15,000 Dh - 25,000 Dh</option>
                   <option>25,000 Dh - 40,000+ Dh</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Platform Preference</label>
-                <select class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-gray-300 focus:outline-none focus:border-red-600">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-platform">Platform Preference</label>
+                <select id="quote-platform" class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-gray-300 focus:outline-none focus:border-red-600">
                   <option>Intel + NVIDIA</option>
                   <option>AMD Ryzen + NVIDIA</option>
                   <option>Full AMD (Ryzen + Radeon)</option>
@@ -334,12 +337,12 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Aesthetic & Performance Notes</label>
-              <textarea rows="4" placeholder="e.g., Black case, no RGB, needs to run Cyberpunk at 1440p and handle Blender renders..." class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600"></textarea>
+              <label class="block text-xs font-bold uppercase text-gray-400 mb-2" for="quote-notes">Aesthetic & Performance Notes</label>
+              <textarea id="quote-notes" rows="4" placeholder="e.g., Black case, no RGB, needs to run Cyberpunk at 1440p..." class="w-full bg-[#0f1115] border border-gray-800 rounded px-4 py-3 text-xs text-white focus:outline-none focus:border-red-600"></textarea>
             </div>
 
             <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded transition">
-              Submit Spec Request
+              Submit Quote Request
             </button>
           </form>
         </div>
@@ -368,8 +371,8 @@
           </div>
         </div>
         <div class="mt-8 border border-red-600/30 bg-red-600/5 rounded p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div><h2 class="text-sm font-black uppercase text-white">Besoin d’aide maintenant ?</h2><p class="text-xs text-gray-400 mt-1">Notre équipe répond du lundi au samedi, de 9h à 19h.</p></div>
-          <a href="tel:+212612345678" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-5 py-3 rounded whitespace-nowrap">Appeler le support</a>
+          <div><h2 class="text-sm font-black uppercase text-white">Need help now?</h2><p class="text-xs text-gray-400 mt-1">Our team responds Monday-Saturday, 9am-7pm.</p></div>
+          <a href="tel:+212612345678" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-5 py-3 rounded whitespace-nowrap">Call Support</a>
         </div>
       </section>
     </main>
@@ -377,333 +380,25 @@
 
   <div id="cart-drawer" class="hidden fixed inset-0 z-[60] bg-black/60" onclick="closeCart(event)">
     <aside class="absolute right-0 top-0 h-full w-full max-w-md bg-white text-[#10151c] shadow-2xl p-6 flex flex-col" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between border-b border-gray-200 pb-5"><div><span class="text-[10px] uppercase tracking-widest text-red-600 font-black">Votre sélection</span><h2 class="text-2xl font-black uppercase">Mon panier</h2></div><button onclick="closeCart()" aria-label="Fermer le panier" class="text-2xl text-gray-400 hover:text-black">&times;</button></div>
+      <div class="flex items-center justify-between border-b border-gray-200 pb-5"><div><span class="text-[10px] uppercase tracking-widest text-red-600 font-black">Your selection</span><h2 class="text-2xl font-black uppercase">Shopping Cart</h2></div><button onclick="closeCart()" aria-label="Close cart" class="text-2xl text-gray-400 hover:text-black">&times;</button></div>
       <div id="cart-items" class="flex-1 overflow-y-auto py-5 space-y-3"></div>
       <div class="border-t border-gray-200 pt-5"><div class="flex justify-between text-sm font-bold uppercase"><span>Total</span><span id="cart-total">0 Dh</span></div><button onclick="checkoutCart()" class="w-full mt-5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded">Checkout</button></div>
     </aside>
   </div>
 
   <div id="product-modal" class="hidden fixed inset-0 z-[60] bg-black/70 p-6 items-center justify-center" onclick="closeProductModal(event)">
-    <div class="bg-white text-[#10151c] w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded shadow-2xl" onclick="event.stopPropagation()"><div class="h-44 bg-[#10151c] relative overflow-hidden"><img id="detail-image" alt="" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div><button onclick="closeProductModal()" aria-label="Fermer les détails" class="absolute top-4 right-4 text-2xl text-white hover:text-red-400">&times;</button></div><div class="p-6 md:p-8"><div class="flex justify-between items-start gap-5"><div><span id="detail-category" class="text-[10px] uppercase tracking-widest font-black text-red-600"></span><h2 id="detail-name" class="text-3xl font-black uppercase mt-2"></h2></div><span id="detail-stock" class="text-[10px] uppercase font-bold text-emerald-600 bg-emerald-50 px-3 py-2 rounded whitespace-nowrap"></span></div><p id="detail-description" class="text-sm text-gray-600 mt-4 leading-relaxed"></p><div class="mt-6"><p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Configuration</p><div id="detail-specs" class="grid gap-2 bg-gray-100 rounded p-4 text-xs leading-5"></div></div><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-gray-200 mt-7 pt-6"><div><span class="block text-[10px] uppercase font-bold text-gray-400">Prix</span><strong id="detail-price" class="text-3xl font-black"></strong></div><button id="detail-add" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider px-7 py-4 rounded">Ajouter au panier</button></div></div></div>
+    <div class="bg-white text-[#10151c] w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded shadow-2xl" onclick="event.stopPropagation()"><div class="h-44 bg-[#10151c] relative overflow-hidden"><img id="detail-image" alt="" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div><button onclick="closeProductModal()" aria-label="Close product details" class="absolute top-4 right-4 text-2xl text-white hover:text-red-400">&times;</button></div><div class="p-6 md:p-8"><div class="flex justify-between items-start gap-5"><div><span id="detail-category" class="text-[10px] uppercase tracking-widest font-black text-red-600"></span><h2 id="detail-name" class="text-3xl font-black uppercase mt-2"></h2></div><span id="detail-stock" class="text-[10px] uppercase font-bold text-emerald-600 bg-emerald-50 px-3 py-2 rounded whitespace-nowrap"></span></div><p id="detail-description" class="text-sm text-gray-600 mt-4 leading-relaxed"></p><div class="mt-6"><p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Configuration</p><div id="detail-specs" class="grid gap-2 bg-gray-100 rounded p-4 text-xs leading-5"></div></div><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-gray-200 mt-7 pt-6"><div><span class="block text-[10px] uppercase font-bold text-gray-400">Price</span><strong id="detail-price" class="text-3xl font-black"></strong></div><button id="detail-add" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider px-7 py-4 rounded">Add to Cart</button></div></div></div>
   </div>
 
   <div id="checkout-modal" class="hidden fixed inset-0 z-[65] bg-black/70 p-6 items-center justify-center" onclick="closeCheckout(event)">
-    <form id="checkout-form" class="bg-white text-[#10151c] w-full max-w-lg rounded p-6 shadow-2xl" onclick="event.stopPropagation()"><div class="flex justify-between items-start"><div><span class="text-[10px] uppercase tracking-widest font-black text-red-600">Complete your order</span><h2 class="text-2xl font-black uppercase mt-1">Your details</h2></div><button type="button" onclick="closeCheckout()" aria-label="Close checkout" class="text-2xl text-gray-400">&times;</button></div><div class="grid gap-3 mt-5"><input id="checkout-name" required placeholder="Full name *" class="border border-gray-300 rounded px-3 py-3 text-sm"><input id="checkout-phone" required type="tel" placeholder="Mobile *" class="border border-gray-300 rounded px-3 py-3 text-sm"><input id="checkout-email" type="email" placeholder="Email" class="border border-gray-300 rounded px-3 py-3 text-sm"><input id="checkout-address" required placeholder="Delivery address *" class="border border-gray-300 rounded px-3 py-3 text-sm"><select id="checkout-payment" class="border border-gray-300 rounded px-3 py-3 text-sm"><option>Pay on delivery</option></select></div><div id="checkout-summary" class="bg-gray-100 rounded p-4 mt-4 text-xs"></div><button type="submit" class="w-full mt-5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded">Confirm order</button></form>
+    <form id="checkout-form" class="bg-white text-[#10151c] w-full max-w-lg rounded p-6 shadow-2xl" onclick="event.stopPropagation()"><div class="flex justify-between items-start"><div><span class="text-[10px] uppercase tracking-widest font-black text-red-600">Complete your order</span><h2 class="text-2xl font-black uppercase mt-1">Your Details</h2></div><button type="button" onclick="closeCheckout()" aria-label="Close checkout" class="text-2xl text-gray-400">&times;</button></div><div class="grid gap-3 mt-5"><input id="checkout-name" required placeholder="Full name *" class="border border-gray-300 rounded px-3 py-3 text-sm" aria-label="Full name"><input id="checkout-phone" required type="tel" placeholder="Mobile *" class="border border-gray-300 rounded px-3 py-3 text-sm" aria-label="Phone number"><input id="checkout-email" type="email" placeholder="Email" class="border border-gray-300 rounded px-3 py-3 text-sm" aria-label="Email address"><input id="checkout-address" required placeholder="Delivery address *" class="border border-gray-300 rounded px-3 py-3 text-sm" aria-label="Delivery address"><select id="checkout-payment" class="border border-gray-300 rounded px-3 py-3 text-sm" aria-label="Payment method"><option>Pay on delivery</option></select></div><div id="checkout-summary" class="bg-gray-100 rounded p-4 mt-4 text-xs"></div><button type="submit" class="w-full mt-5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded">Confirm Order</button></form>
   </div>
 
   <footer class="bg-black py-8 border-t border-gray-900 text-center text-xs text-gray-600 font-mono mt-12">
-    <p>© 2026 APEX RIGS LLC. ALL RIGHTS RESERVED.</p>
+    <p>© 2026 APEX RIGS LLC. ALL RIGHTS RESERVED. | Built with integrity for Moroccan gamers.</p>
   </footer>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-  <script>
-    let currentLanguage = localStorage.getItem('apex-rigs-language') || 'en';
-    const translations = {
-      fr: { 'Explore the store': 'Explorer la boutique', 'Our Categories': 'Nos catégories', 'PC components and builds': 'Composants et configurations', 'Featured Products': 'Produits vedettes', 'APEX SELECTION': 'SÉLECTION APEX', 'Our team’s top picks': 'Les favoris de notre équipe', 'Checkout': 'Passer la commande', 'Details': 'Détails', 'Add to cart': 'Ajouter au panier', 'Price': 'Prix', 'Help': 'Aide', 'Components': 'Composants', 'PC Builder': 'Configurateur PC', 'Call support': 'Appeler le support', 'No products found': 'Aucun produit trouvé', 'Your cart is empty': 'Votre panier est vide', 'Your selection': 'Votre sélection', 'My cart': 'Mon panier', 'Order summary': 'Résumé de la commande', 'Your details': 'Vos coordonnées', 'Complete your order': 'Finaliser la commande', 'Full name *': 'Nom complet *', 'Delivery address *': 'Adresse de livraison *', 'Pay on delivery': 'Paiement à la livraison', 'Confirm order': 'Confirmer la commande', 'Featured': 'Vedette', 'Configuration assembled and tested by APEX RIGS.': 'Configuration assemblée et testée par APEX RIGS.' },
-      en: { 'Nos catégories': 'Our Categories', 'Explorer la boutique': 'Explore the store', 'Composants et configurations': 'PC components and builds', 'Produits vedettes': 'Featured Products', 'SÉLECTION APEX': 'APEX SELECTION', 'Les favoris de notre équipe': 'Our team’s top picks', 'Passer la commande': 'Checkout', 'Détails': 'Details', 'Ajouter au panier': 'Add to cart', 'Prix': 'Price', 'Aide': 'Help', 'Composants': 'Components', 'Configurateur PC': 'PC Builder', 'Appeler le support': 'Call support', 'Aucun produit trouvé': 'No products found', 'Votre panier est vide': 'Your cart is empty', 'Votre sélection': 'Your selection', 'Mon panier': 'My cart', 'Résumé de la commande': 'Order summary', 'Vos coordonnées': 'Your details', 'Finaliser la commande': 'Complete your order', 'Nom complet *': 'Full name *', 'Adresse de livraison *': 'Delivery address *', 'Paiement à la livraison': 'Pay on delivery', 'Confirmer la commande': 'Confirm order', 'Processeur': 'Processor', 'Écrans': 'Displays', 'Cartes mères': 'Motherboards', 'Boîtiers': 'Cases', 'Stockage': 'Storage', 'Cartes graphiques': 'Graphics cards', 'Mémoire vive': 'Memory kits', 'SSD et NVMe': 'SSD and NVMe', 'Cases gaming': 'Gaming cases', 'Construisez votre setup': 'Build your setup', 'Composants PC': 'PC Components', 'Voir les PC Gamer': 'Shop gaming PCs', 'Configurer mon PC': 'Build your PC', 'Garantie 2 ans': '2-year warranty', 'Testé 24h': '24-hour tested', 'Série performance 2026': 'Performance series 2026', 'Le PC Gamer qui vous ressemble.': 'The gaming PC that fits you.', 'Des configurations prêtes à jouer, assemblées au Maroc et testées avant expédition. Passez au niveau supérieur dès aujourd’hui.': 'Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.' }
-    };
-
-    function setLanguage(language) {
-      const dictionary = translations[language];
-      document.querySelectorAll('body *').forEach(element => {
-        if (element.children.length === 0 && dictionary[element.textContent.trim()]) element.textContent = dictionary[element.textContent.trim()];
-        if (element.placeholder && dictionary[element.placeholder]) element.placeholder = dictionary[element.placeholder];
-      });
-      document.getElementById('lang-en').className = language === 'en' ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded' : 'px-2 py-1 text-[10px] font-black text-gray-300 rounded';
-      document.getElementById('lang-fr').className = language === 'fr' ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded' : 'px-2 py-1 text-[10px] font-black text-gray-300 rounded';
-      currentLanguage = language;
-      renderMarketplaceProducts();
-      document.querySelectorAll('body *').forEach(element => {
-        if (element.children.length === 0 && dictionary[element.textContent.trim()]) element.textContent = dictionary[element.textContent.trim()];
-      });
-      localStorage.setItem('apex-rigs-language', language);
-    }
-
-    function renderIcons() {
-      if (window.lucide) lucide.createIcons();
-    }
-
-    document.querySelectorAll('.category-art').forEach((element, index) => {
-      const images = [
-        ['https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=700&auto=format&fit=crop', 'Graphics card'],
-        ['https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=700&auto=format&fit=crop', 'Gaming monitor'],
-        ['https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=700&auto=format&fit=crop', 'Processor'],
-        ['https://images.unsplash.com/photo-1562976540-1502c2145186?q=80&w=700&auto=format&fit=crop', 'RAM memory'],
-        ['https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=700&auto=format&fit=crop', 'Motherboard'],
-        ['https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=700&auto=format&fit=crop', 'Solid state drive'],
-        ['https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=700&auto=format&fit=crop', 'Gaming PC case']
-      ];
-      element.innerHTML = '<img src="' + images[index][0] + '" alt="' + images[index][1] + '" loading="lazy">';
-    });
-    renderIcons();
-
-    function setupCategoryMarquee() {
-      const track = document.getElementById('category-track');
-      if (!track || track.querySelector('.category-track-inner')) return;
-      const inner = document.createElement('div');
-      inner.className = 'category-track-inner';
-      Array.from(track.children).forEach(tile => inner.appendChild(tile));
-      Array.from(inner.children).forEach(tile => {
-        const clone = tile.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        inner.appendChild(clone);
-      });
-      track.appendChild(inner);
-    }
-
-    setupCategoryMarquee();
-
-    function openQuoteRequest(productName) {
-      switchPage('builder');
-      const notes = document.querySelector('#page-builder textarea');
-      if (notes) notes.value = 'Je souhaite un devis pour: ' + productName + '.\n';
-      document.getElementById('quote-name').focus();
-    }
-
-    document.getElementById('quote-form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const name = document.getElementById('quote-name').value.trim();
-      const quoteRequests = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
-      const quote = { name, email: this.querySelector('input[type="email"]').value.trim(), phone: this.querySelector('input[type="tel"]').value.trim(), budget: this.querySelector('select').value, platform: this.querySelectorAll('select')[1].value, notes: this.querySelector('textarea').value.trim(), status: 'NEW REQUEST' };
-      quoteRequests.unshift({ ...quote, createdAt: new Date().toISOString() });
-      localStorage.setItem('apex-rigs-quotes', JSON.stringify(quoteRequests));
-      createQuote(quote).catch(() => {});
-      const notice = document.createElement('div');
-      notice.className = 'fixed bottom-6 right-6 z-[70] bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded shadow-lg';
-      notice.textContent = 'Merci ' + name + ', votre demande a été envoyée.';
-      document.body.appendChild(notice);
-      setTimeout(() => notice.remove(), 3000);
-      this.reset();
-    });
-
-    let cart = JSON.parse(localStorage.getItem('apex-rigs-cart') || '[]');
-
-    function showCartMessage() {
-      renderCart();
-      document.getElementById('cart-drawer').classList.remove('hidden');
-    }
-
-    function toggleComponentMenu() {
-      const menu = document.getElementById('component-menu');
-      const button = document.querySelector('[aria-controls="component-menu"]');
-      const isOpen = menu.classList.toggle('hidden');
-      button.setAttribute('aria-expanded', String(!isOpen));
-    }
-
-    function closeComponentMenu(event) {
-      if (!event || event.target === document.getElementById('component-menu')) {
-        document.getElementById('component-menu').classList.add('hidden');
-        document.querySelector('[aria-controls="component-menu"]').setAttribute('aria-expanded', 'false');
-      }
-    }
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeComponentMenu();
-    });
-
-    function scrollCategories(direction) {
-      document.getElementById('category-track').scrollBy({ left: direction * 300, behavior: 'smooth' });
-    }
-
-    function renderMarketplaceProducts() {
-      const stored = JSON.parse(localStorage.getItem('apex-rigs-inventory') || '[]');
-      const container = document.getElementById('dynamic-products');
-      if (!container) return;
-      container.innerHTML = stored.filter(product => !product.disabled && product.visible !== false && product.name && !['The Vector i5', 'The Apex 7800X3D', 'The Dominator 4090'].includes(product.name)).map(renderProductCard).join('');
-      renderFeaturedProducts(stored);
-      filterCatalog();
-    }
-
-    async function loadSharedProducts() {
-      try {
-        const products = await getProducts();
-        localStorage.setItem('apex-rigs-inventory', JSON.stringify(products));
-        renderMarketplaceProducts();
-      } catch (error) {
-        console.warn('Shared products unavailable; using local catalog.', error.message);
-      }
-    }
-
-    function renderProductCard(product, isFeatured = false) {
-      const image = product.image || 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=900&auto=format&fit=crop';
-      const specs = (product.specs || 'Specifications pending').split(' | ').map(spec => '<div class="flex justify-between gap-3"><span class="text-gray-500">' + escapeHtml(spec.split(':')[0]) + '</span><span class="text-gray-200 text-right">' + escapeHtml(spec.split(':').slice(1).join(':').trim() || spec) + '</span></div>').join('');
-      const price = Number(product.price.replace(/[^0-9]/g, ''));
-      return '<article data-category="' + escapeHtml(product.category || 'Gaming PC') + '" data-product="' + escapeHtml((product.name + ' ' + product.specs).toLowerCase()) + '" class="catalog-product bg-[#161920] border border-gray-800 rounded flex flex-col justify-between hover:border-gray-700 transition"><div class="p-6">' + (isFeatured ? '<div class="text-[10px] uppercase tracking-widest text-amber-400 font-black mb-3">Featured</div>' : '') + '<div class="flex justify-between items-start mb-4"><span class="text-[10px] font-bold uppercase tracking-widest bg-gray-800 text-gray-300 px-2 py-1 rounded">' + escapeHtml(product.category || 'New arrival') + '</span><span class="text-xs font-bold text-emerald-400">' + escapeHtml(product.stock || 'Available') + '</span></div><div class="h-44 bg-gray-900 rounded mb-6 overflow-hidden border border-gray-800"><img src="' + escapeHtml(image) + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-cover"></div><h3 class="text-lg font-extrabold uppercase text-white">' + escapeHtml(product.name) + '</h3><p class="text-xs text-gray-400 mt-1 mb-4 line-clamp-2">' + escapeHtml(product.description || 'Configuration assembled and tested by APEX RIGS.') + '</p><div class="space-y-2 border-t border-b border-gray-800/80 py-4 text-xs font-mono">' + specs + '</div></div><div class="p-6 pt-0 flex items-center justify-between gap-3"><div><span class="text-xs text-gray-500 block">Price</span><span class="text-2xl font-black text-white">' + escapeHtml(product.price) + '</span></div><div class="flex gap-2"><button onclick="showProductDetailsByName(' + jsString(product.name) + ')" class="border border-gray-600 hover:border-white text-white font-bold text-[10px] uppercase px-3 py-2.5 rounded">Details</button><button onclick="addToCart(' + jsString(product.name) + ', ' + price + ')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] uppercase px-3 py-2.5 rounded">Add to cart</button></div></div></article>';
-    }
-
-    function showProductDetails(product) {
-      const detailImage = document.getElementById('detail-image');
-      detailImage.src = product.image || 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1200&auto=format&fit=crop';
-      detailImage.alt = product.name;
-      document.getElementById('detail-category').textContent = product.category || 'New arrival';
-      document.getElementById('detail-name').textContent = product.name;
-      document.getElementById('detail-description').textContent = product.description || 'Configuration assemblée et testée par APEX RIGS.';
-      document.getElementById('detail-specs').innerHTML = (product.specs || 'Specifications pending').split(' | ').map(spec => '<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>' + escapeHtml(spec) + '</span>').join('');
-      document.getElementById('detail-price').textContent = product.price;
-      document.getElementById('detail-stock').textContent = product.stock || 'Disponible';
-      document.getElementById('detail-add').onclick = () => { addToCart(product.name, Number(product.price.replace(/[^0-9]/g, ''))); closeProductModal(); };
-      document.getElementById('product-modal').classList.remove('hidden');
-      document.getElementById('product-modal').classList.add('flex');
-    }
-
-    function renderFeaturedProducts(products) {
-      const featured = products.filter(product => product.featured && !product.disabled && product.visible !== false);
-      const section = document.getElementById('featured-section');
-      const container = document.getElementById('featured-products');
-      section.classList.toggle('hidden', featured.length === 0);
-      container.innerHTML = featured.map(product => renderProductCard(product, true)).join('');
-    }
-
-    function showProductDetailsByName(name) {
-      const product = JSON.parse(localStorage.getItem('apex-rigs-inventory') || '[]').find(item => item.name === name);
-      if (product) showProductDetails(product);
-    }
-
-    function closeProductModal(event) {
-      if (!event || event.target === document.getElementById('product-modal')) document.getElementById('product-modal').classList.add('hidden');
-    }
-
-    function closeCart(event) {
-      if (!event || event.target === document.getElementById('cart-drawer')) document.getElementById('cart-drawer').classList.add('hidden');
-    }
-
-    function addToCart(name, price) {
-      const item = cart.find(product => product.name === name);
-      if (item) item.quantity += 1;
-      else cart.push({ name, price, quantity: 1 });
-      saveCart();
-      renderCart();
-      showToast(name + ' ajouté au panier');
-    }
-
-    function updateCartItem(name, change) {
-      const item = cart.find(product => product.name === name);
-      if (!item) return;
-      item.quantity += change;
-      cart = cart.filter(product => product.quantity > 0);
-      saveCart();
-      renderCart();
-    }
-
-    function saveCart() {
-      localStorage.setItem('apex-rigs-cart', JSON.stringify(cart));
-      document.getElementById('cart-count').textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    }
-
-    function renderCart() {
-      const items = document.getElementById('cart-items');
-      if (!cart.length) {
-        items.innerHTML = '<div class="text-center py-16"><div class="text-4xl mb-4">🛒</div><p class="font-black uppercase">Votre panier est vide</p><p class="text-xs text-gray-500 mt-2">Ajoutez une configuration pour commencer.</p></div>';
-      } else {
-        items.innerHTML = cart.map(item => '<div class="border border-gray-200 rounded p-4"><div class="flex justify-between gap-4"><strong class="text-sm uppercase">' + item.name + '</strong><span class="font-black whitespace-nowrap">' + (item.price * item.quantity).toLocaleString('fr-FR') + ' Dh</span></div><div class="flex items-center justify-between mt-3 text-xs text-gray-500"><span>' + item.price.toLocaleString('fr-FR') + ' Dh / unité</span><div class="flex items-center gap-3"><button onclick="updateCartItem(\'' + item.name + '\', -1)" class="w-7 h-7 border border-gray-300 rounded hover:border-red-600">−</button><span class="font-bold text-black">' + item.quantity + '</span><button onclick="updateCartItem(\'' + item.name + '\', 1)" class="w-7 h-7 border border-gray-300 rounded hover:border-red-600">+</button></div></div></div>').join('');
-      }
-      document.getElementById('cart-total').textContent = cart.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString('fr-FR') + ' Dh';
-      saveCart();
-    }
-
-    function checkoutCart() {
-      if (!cart.length) return showToast('Ajoutez un produit avant de commander');
-      closeCart();
-      document.getElementById('checkout-summary').innerHTML = cart.map(item => '<div class="flex justify-between"><span>' + escapeHtml(item.name) + ' × ' + item.quantity + '</span><strong>' + (item.price * item.quantity).toLocaleString('fr-FR') + ' Dh</strong></div>').join('') + '<div class="border-t border-gray-300 mt-3 pt-3 flex justify-between font-bold"><span>Total</span><span>' + cart.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString('fr-FR') + ' Dh</span></div>';
-      document.getElementById('checkout-modal').classList.remove('hidden');
-      document.getElementById('checkout-modal').classList.add('flex');
-    }
-
-    function closeCheckout(event) {
-      if (!event || event.target === document.getElementById('checkout-modal')) document.getElementById('checkout-modal').classList.add('hidden');
-    }
-
-    document.getElementById('checkout-form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const order = { id: '#AR-' + Math.floor(9000 + Math.random() * 999), customer: document.getElementById('checkout-name').value.trim(), phone: document.getElementById('checkout-phone').value.trim(), email: document.getElementById('checkout-email').value.trim(), address: document.getElementById('checkout-address').value.trim(), products: cart, total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), status: 'New Order', createdAt: new Date().toISOString() };
-      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
-      orders.unshift(order);
-      localStorage.setItem('apex-rigs-orders', JSON.stringify(orders));
-      createOrder({ order_number: order.id, customer: order.customer, phone: order.phone, email: order.email, address: order.address, products: order.products, total: order.total, payment: order.payment || 'Pay on delivery', status: order.status }).catch(() => {});
-      cart = [];
-      saveCart();
-      closeCheckout();
-      showToast('Commande ' + order.id + ' enregistrée');
-      this.reset();
-    });
-
-    function showToast(message) {
-      const notice = document.createElement('div');
-      notice.className = 'fixed bottom-6 right-6 z-[70] bg-[#10151c] text-white text-xs font-bold px-4 py-3 rounded shadow-lg';
-      notice.textContent = message;
-      document.body.appendChild(notice);
-      setTimeout(() => notice.remove(), 2400);
-    }
-
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character]));
-    }
-
-    function jsString(value) {
-      return "'" + String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n') + "'";
-    }
-
-    let activeCategory = '';
-
-    function showCatalogCategory(category) {
-      activeCategory = category;
-      closeComponentMenu();
-      document.getElementById('catalog-search').value = '';
-      filterCatalog();
-      document.getElementById('prebuilts').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function filterCatalog() {
-      const query = document.getElementById('catalog-search').value.toLowerCase().trim();
-      const products = document.querySelectorAll('.catalog-product');
-      let visibleProducts = 0;
-      products.forEach(product => {
-        const matches = (!activeCategory || (product.dataset.category || '').toLowerCase().includes(activeCategory.toLowerCase())) && (!query || product.dataset.product.includes(query));
-        product.hidden = !matches;
-        if (matches) visibleProducts += 1;
-      });
-      document.getElementById('catalog-empty').classList.toggle('visible', visibleProducts === 0);
-      if (query && visibleProducts === 0) document.getElementById('prebuilts').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    document.getElementById('catalog-search').addEventListener('input', filterCatalog);
-    saveCart();
-    renderCart();
-    renderMarketplaceProducts();
-    loadSharedProducts();
-    apexSupabase.channel('marketplace-products').on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, loadSharedProducts).subscribe();
-    apexSupabase.channel('marketplace-orders').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, () => showToast('New order received')).subscribe();
-    setLanguage(localStorage.getItem('apex-rigs-language') || 'en');
-    window.addEventListener('storage', event => {
-      if (event.key === 'apex-rigs-inventory') renderMarketplaceProducts();
-      if (event.key === 'apex-rigs-cart') {
-        cart = JSON.parse(event.newValue || '[]');
-        renderCart();
-      }
-    });
-
-    function switchPage(pageId) {
-      // Hide all page sections
-      const sections = document.querySelectorAll('.page-section');
-      sections.forEach(s => s.classList.remove('active'));
-
-      // Show selected page
-      const target = document.getElementById('page-' + pageId);
-      if (target) target.classList.add('active');
-
-      // Update Nav active style
-      const navBtns = document.querySelectorAll('.nav-btn');
-      navBtns.forEach(btn => btn.classList.remove('text-white'));
-      
-      const activeNav = document.getElementById('nav-' + pageId);
-      if (activeNav) activeNav.classList.add('text-white');
-
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
-
+  <script src="app.js"></script>
 </body>
 </html>
