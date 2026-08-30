@@ -496,8 +496,9 @@
       return value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character]));
     }
 
-    function saveInventory() {
+    async function saveInventory() {
       const products = Array.from(document.querySelectorAll('#inventory-body tr')).map(row => ({
+        id: row.dataset.id || undefined,
         name: row.cells[0].textContent.trim(),
         specs: row.cells[1].textContent.trim(),
         price: row.cells[2].textContent.trim(),
@@ -509,7 +510,30 @@
         visible: row.dataset.visible !== 'false',
         featured: row.dataset.featured === 'true'
       }));
+
       localStorage.setItem('apex-rigs-inventory', JSON.stringify(products));
+
+      for (const product of products) {
+        try {
+          const normalized = {
+            id: product.id || undefined,
+            name: product.name,
+            category: product.category,
+            description: product.description || '',
+            price: Number(String(product.price).replace(/[^0-9.]/g, '')) || 0,
+            specs: product.specs || 'Specifications pending',
+            stock: Number(String(product.stock).match(/\d+/)?.[0]) || 0,
+            image: product.image || '',
+            visible: product.visible !== false,
+            featured: !!product.featured,
+            disabled: !!product.disabled,
+            updated_at: new Date().toISOString()
+          };
+          await saveProduct(normalized);
+        } catch (error) {
+          console.warn('Inventory sync skipped for product', product.name, error.message);
+        }
+      }
     }
 
     function normalizePrice(price) {
@@ -518,23 +542,41 @@
       return amount ? Math.round(amount * 10).toLocaleString('en-US') + ' Dh' : price.replace('$', '');
     }
 
-    function restoreInventory() {
-      const stored = JSON.parse(localStorage.getItem('apex-rigs-inventory') || 'null');
-      if (!stored) {
-        saveInventory();
-        return;
+    async function restoreInventory() {
+      try {
+        const remoteProducts = await getProducts();
+        const products = Array.isArray(remoteProducts) && remoteProducts.length ? remoteProducts : JSON.parse(localStorage.getItem('apex-rigs-inventory') || '[]');
+        const normalized = products.map(product => ({
+          id: product.id,
+          name: product.name || 'Unnamed product',
+          specs: product.specs || product.description || 'Specifications pending',
+          price: normalizePrice(product.price ? String(product.price) : '0 Dh'),
+          stock: product.stock ? String(product.stock) : 'Built to Order (0 In Stock)',
+          category: product.category || 'Gaming PC',
+          description: product.description || '',
+          image: product.image || '',
+          visible: product.visible !== false,
+          featured: !!product.featured,
+          disabled: !!product.disabled
+        }));
+
+        document.getElementById('inventory-body').innerHTML = normalized.map(product => {
+          const stockText = product.stock && product.stock.toString().includes('Built to Order') ? product.stock : (product.stock || '0') + ' Units Available';
+          const isDisabled = product.disabled;
+          return '<tr data-id="' + (product.id || '') + '" data-category="' + escapeHtml(product.category) + '" data-description="' + escapeHtml(product.description) + '" data-image="' + escapeHtml(product.image) + '" data-visible="' + String(product.visible !== false) + '" data-featured="' + String(!!product.featured) + '"><td class="p-4 font-bold text-white">' + escapeHtml(product.name) + '</td><td class="p-4">' + escapeHtml(product.specs) + '</td><td class="p-4 font-bold text-white">' + escapeHtml(product.price) + '</td><td class="p-4"><span class="' + (isDisabled ? 'text-gray-500' : 'text-emerald-400') + ' font-bold">' + escapeHtml(stockText) + '</span></td><td class="p-4 text-right space-x-2"><button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button><button onclick="toggleInventory(this)" class="' + (isDisabled ? 'bg-emerald-950 hover:bg-emerald-900 text-emerald-400' : 'bg-red-950 hover:bg-red-900 text-red-400') + ' px-2 py-1 rounded">' + (isDisabled ? 'Enable' : 'Disable') + '</button></td></tr>';
+        }).join('');
+
+        localStorage.setItem('apex-rigs-inventory', JSON.stringify(normalized));
+      } catch (error) {
+        console.warn('Could not restore inventory from Supabase, using local storage fallback:', error.message);
+        const stored = JSON.parse(localStorage.getItem('apex-rigs-inventory') || 'null');
+        if (!stored) {
+          saveInventory();
+          return;
+        }
+        stored.forEach(product => product.price = normalizePrice(product.price));
+        document.getElementById('inventory-body').innerHTML = stored.map(product => '<tr><td class="p-4 font-bold text-white">' + product.name + '</td><td class="p-4">' + product.specs + '</td><td class="p-4 font-bold text-white">' + product.price + '</td><td class="p-4"><span class="' + (product.disabled ? 'text-gray-500' : 'text-emerald-400') + ' font-bold">' + product.stock + '</span></td><td class="p-4 text-right space-x-2"><button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button><button onclick="toggleInventory(this)" class="' + (product.disabled ? 'bg-emerald-950 hover:bg-emerald-900 text-emerald-400' : 'bg-red-950 hover:bg-red-900 text-red-400') + ' px-2 py-1 rounded">' + (product.disabled ? 'Enable' : 'Disable') + '</button></td></tr>').join('');
       }
-      stored.forEach(product => product.price = normalizePrice(product.price));
-      document.getElementById('inventory-body').innerHTML = stored.map(product => '<tr><td class="p-4 font-bold text-white">' + product.name + '</td><td class="p-4">' + product.specs + '</td><td class="p-4 font-bold text-white">' + product.price + '</td><td class="p-4"><span class="' + (product.disabled ? 'text-gray-500' : 'text-emerald-400') + ' font-bold">' + product.stock + '</span></td><td class="p-4 text-right space-x-2"><button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button><button onclick="toggleInventory(this)" class="' + (product.disabled ? 'bg-emerald-950 hover:bg-emerald-900 text-emerald-400' : 'bg-red-950 hover:bg-red-900 text-red-400') + ' px-2 py-1 rounded">' + (product.disabled ? 'Enable' : 'Disable') + '</button></td></tr>').join('');
-      stored.forEach((product, index) => {
-        const row = document.getElementById('inventory-body').children[index];
-        row.dataset.category = product.category || 'Gaming PC';
-        row.dataset.description = product.description || '';
-        row.dataset.image = product.image || '';
-        row.dataset.visible = product.visible !== false;
-        row.dataset.featured = product.featured === true;
-      });
-      saveInventory();
     }
 
     function updateOrderCount(increment) {
@@ -550,18 +592,30 @@
       });
     }
 
-    function restoreCustomerOrders() {
-      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
-      const body = document.querySelector('#tab-orders tbody');
-      orders.reverse().forEach(order => {
-        if ([...body.rows].some(row => row.cells[0].textContent.trim() === order.id)) return;
-        const products = order.products.map(item => item.name + ' × ' + item.quantity).join(', ');
-        body.insertAdjacentHTML('afterbegin', '<tr><td class="p-4 font-bold text-white">' + escapeHtml(order.id) + '</td><td class="p-4">' + escapeHtml(order.customer) + '<br/><span class="text-gray-500 text-[10px]">' + escapeHtml(order.email || 'online order') + '</span></td><td class="p-4 text-gray-300">' + escapeHtml(order.phone) + '</td><td class="p-4">' + escapeHtml(products) + '</td><td class="p-4 text-white font-bold">' + order.total.toLocaleString('fr-FR') + ' Dh</td><td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">' + escapeHtml(order.status) + '</span></td><td class="p-4 text-right"><button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button></td></tr>');
-      });
-      if (orders.length) updateOrderCount(orders.length);
-      document.querySelectorAll('#tab-orders tbody tr').forEach(row => {
-        if (!row.querySelector('[data-delete-order]')) row.cells[6].insertAdjacentHTML('beforeend', '<button data-delete-order onclick="deleteOrder(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1 rounded text-[10px] font-bold uppercase ml-2">Delete</button>');
-      });
+    async function restoreCustomerOrders() {
+      try {
+        const remoteOrders = await getOrders();
+        const orders = Array.isArray(remoteOrders) && remoteOrders.length ? remoteOrders : JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+        const body = document.querySelector('#tab-orders tbody');
+        body.innerHTML = orders.slice().reverse().map(order => {
+          const products = Array.isArray(order.products) ? order.products.map(item => item.name + ' × ' + (item.quantity || 1)).join(', ') : (order.products || 'Custom build');
+          const total = Number(order.total || 0);
+          return '<tr><td class="p-4 font-bold text-white">' + escapeHtml(order.order_number || order.id || '#AR-0000') + '</td><td class="p-4">' + escapeHtml(order.customer || 'Customer') + '<br/><span class="text-gray-500 text-[10px]">' + escapeHtml(order.email || 'online order') + '</span></td><td class="p-4 text-gray-300">' + escapeHtml(order.phone || '') + '</td><td class="p-4">' + escapeHtml(products) + '</td><td class="p-4 text-white font-bold">' + total.toLocaleString('fr-FR') + ' Dh</td><td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">' + escapeHtml(order.status || 'New Order') + '</span></td><td class="p-4 text-right"><button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button><button data-delete-order onclick="deleteOrder(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1 rounded text-[10px] font-bold uppercase ml-2">Delete</button></td></tr>';
+        }).join('');
+
+        localStorage.setItem('apex-rigs-orders', JSON.stringify(orders));
+        updateOrderCount(orders.length);
+      } catch (error) {
+        console.warn('Could not restore orders from Supabase, using local storage fallback:', error.message);
+        const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+        const body = document.querySelector('#tab-orders tbody');
+        orders.reverse().forEach(order => {
+          if ([...body.rows].some(row => row.cells[0].textContent.trim() === order.id)) return;
+          const products = order.products.map(item => item.name + ' × ' + item.quantity).join(', ');
+          body.insertAdjacentHTML('afterbegin', '<tr><td class="p-4 font-bold text-white">' + escapeHtml(order.id) + '</td><td class="p-4">' + escapeHtml(order.customer) + '<br/><span class="text-gray-500 text-[10px]">' + escapeHtml(order.email || 'online order') + '</span></td><td class="p-4 text-gray-300">' + escapeHtml(order.phone) + '</td><td class="p-4">' + escapeHtml(products) + '</td><td class="p-4 text-white font-bold">' + order.total.toLocaleString('fr-FR') + ' Dh</td><td class="p-4"><span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">' + escapeHtml(order.status) + '</span></td><td class="p-4 text-right"><button onclick="openOrderUpdate(this)" class="bg-gray-800 hover:bg-gray-700 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase">Update</button></td></tr>');
+        });
+        if (orders.length) updateOrderCount(orders.length);
+      }
     }
 
     function deleteOrder(button) {
@@ -574,15 +628,34 @@
       notify(id + ' deleted');
     }
 
-    function restoreCustomerQuotes() {
-      const quotes = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
-      const list = document.getElementById('quotes-list');
-      quotes.reverse().forEach(quote => {
-        list.insertAdjacentHTML('afterbegin', '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name) + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email) + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform) + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>');
-      });
+    async function restoreCustomerQuotes() {
+      try {
+        const remoteQuotes = await getQuotes();
+        const quotes = Array.isArray(remoteQuotes) && remoteQuotes.length ? remoteQuotes : JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
+        const list = document.getElementById('quotes-list');
+        list.innerHTML = quotes.slice().reverse().map(quote => '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name || 'Customer') + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email || '') + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">' + escapeHtml(quote.status || 'NEW REQUEST') + '</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform || '') + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>').join('');
+        localStorage.setItem('apex-rigs-quotes', JSON.stringify(quotes));
+      } catch (error) {
+        console.warn('Could not restore quotes from Supabase, using local storage fallback:', error.message);
+        const quotes = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
+        const list = document.getElementById('quotes-list');
+        quotes.reverse().forEach(quote => {
+          list.insertAdjacentHTML('afterbegin', '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name) + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email) + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform) + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>');
+        });
+      }
     }
 
-    function updateOverviewFromStorage() {
+    async function updateOverviewFromStorage() {
+      try {
+        const orders = await getOrders();
+        const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+        document.querySelector('#overview-revenue').textContent = revenue.toLocaleString('fr-FR') + ' Dh';
+        document.querySelector('#tab-btn-orders').textContent = 'Orders (' + orders.length + ')';
+        return;
+      } catch (error) {
+        console.warn('Could not load order totals from Supabase:', error.message);
+      }
+
       const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
       const revenue = 184500 + orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
       document.querySelector('#overview-revenue').textContent = revenue.toLocaleString('fr-FR') + ' Dh';
@@ -618,6 +691,19 @@
     document.getElementById('action-modal').addEventListener('click', function (event) {
       if (event.target === this) closeModal();
     });
+
+    async function initializeLiveDashboard() {
+      try {
+        await restoreInventory();
+        await restoreCustomerOrders();
+        await restoreCustomerQuotes();
+        await updateOverviewFromStorage();
+      } catch (error) {
+        console.error('Admin dashboard failed to load live data:', error);
+      }
+    }
+
+    initializeLiveDashboard();
     restoreInventory();
     addInventoryDeleteButtons();
     restoreCustomerOrders();
