@@ -50,19 +50,19 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-[#161920] border border-gray-800 p-4 rounded">
           <span class="text-[10px] font-bold uppercase text-gray-500 block">Monthly Revenue</span>
-          <span class="text-xl font-black text-white font-mono">184,500 Dh</span>
+          <span id="overview-monthly-revenue" class="text-xl font-black text-white font-mono">0 Dh</span>
         </div>
         <div class="bg-[#161920] border border-gray-800 p-4 rounded">
           <span class="text-[10px] font-bold uppercase text-gray-500 block">Pending Builds</span>
-          <span class="text-xl font-black text-amber-400 font-mono">4 Rigs</span>
+          <span id="overview-pending-builds" class="text-xl font-black text-amber-400 font-mono">0 Rigs</span>
         </div>
         <div class="bg-[#161920] border border-gray-800 p-4 rounded">
           <span class="text-[10px] font-bold uppercase text-gray-500 block">In-Stock Rigs</span>
-          <span class="text-xl font-black text-emerald-400 font-mono">12 Units</span>
+          <span id="overview-instock-rigs" class="text-xl font-black text-emerald-400 font-mono">0 Units</span>
         </div>
         <div class="bg-[#161920] border border-gray-800 p-4 rounded">
           <span class="text-[10px] font-bold uppercase text-gray-500 block">Open Quotes</span>
-          <span class="text-xl font-black text-red-500 font-mono">2 Requests</span>
+          <span id="overview-open-quotes" class="text-xl font-black text-red-500 font-mono">0 Requests</span>
         </div>
       </div>
 
@@ -79,16 +79,16 @@
           </select>
         </div>
         <div class="grid md:grid-cols-3 gap-4 mb-6">
-          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Revenue</span><span id="overview-revenue" class="text-2xl font-black text-white font-mono">184,500 Dh</span><span class="text-xs text-emerald-400 block mt-2">+12.8% vs previous period</span></div>
-          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Orders Completed</span><span class="text-2xl font-black text-white font-mono">27</span><span class="text-xs text-gray-500 block mt-2">Across gaming and workstation rigs</span></div>
-          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Average Order Value</span><span class="text-2xl font-black text-white font-mono">6,833 Dh</span><span class="text-xs text-gray-500 block mt-2">Based on completed orders</span></div>
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Revenue</span><span id="overview-revenue" class="text-2xl font-black text-white font-mono">0 Dh</span><span class="text-xs text-emerald-400 block mt-2" id="overview-revenue-change">+0% vs previous period</span></div>
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Orders Completed</span><span id="overview-orders-completed" class="text-2xl font-black text-white font-mono">0</span><span class="text-xs text-gray-500 block mt-2">Across gaming and workstation rigs</span></div>
+          <div class="bg-[#161920] border border-gray-800 p-5 rounded"><span class="text-[10px] font-bold uppercase text-gray-500 block">Average Order Value</span><span id="overview-avg-value" class="text-2xl font-black text-white font-mono">0 Dh</span><span class="text-xs text-gray-500 block mt-2">Based on completed orders</span></div>
         </div>
         <div class="bg-[#161920] border border-gray-800 rounded p-5">
           <h3 class="text-sm font-black uppercase text-white mb-4">Revenue By Channel</h3>
           <div class="space-y-4 text-xs font-mono">
-            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Pre-built gaming rigs</span><span class="text-white">112,300 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-red-600 rounded" style="width:61%"></div></div></div>
-            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Custom builds</span><span class="text-white">49,700 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-amber-500 rounded" style="width:27%"></div></div></div>
-            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Workstations</span><span class="text-white">22,500 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div class="h-2 bg-emerald-500 rounded" style="width:12%"></div></div></div>
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Pre-built gaming rigs</span><span id="channel-gaming-value" class="text-white">0 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div id="channel-gaming-bar" class="h-2 bg-red-600 rounded" style="width:0%"></div></div></div>
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Custom builds</span><span id="channel-custom-value" class="text-white">0 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div id="channel-custom-bar" class="h-2 bg-amber-500 rounded" style="width:0%"></div></div></div>
+            <div><div class="flex justify-between mb-1"><span class="text-gray-400">Workstations</span><span id="channel-workstation-value" class="text-white">0 Dh</span></div><div class="h-2 bg-gray-800 rounded"><div id="channel-workstation-bar" class="h-2 bg-emerald-500 rounded" style="width:0%"></div></div></div>
           </div>
         </div>
       </section>
@@ -181,6 +181,7 @@
                 <td class="p-4 text-right space-x-2">
                   <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
                   <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                  <button data-delete-listing onclick="deleteListing(this)" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">Delete</button>
                 </td>
               </tr>
               <tr>
@@ -191,6 +192,7 @@
                 <td class="p-4 text-right space-x-2">
                   <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
                   <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                  <button data-delete-listing onclick="deleteListing(this)" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">Delete</button>
                 </td>
               </tr>
               <tr>
@@ -201,6 +203,7 @@
                 <td class="p-4 text-right space-x-2">
                   <button onclick="openInventoryEditor(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded">Edit</button>
                   <button onclick="toggleInventory(this)" class="bg-red-950 hover:bg-red-900 text-red-400 px-2 py-1 rounded">Disable</button>
+                  <button data-delete-listing onclick="deleteListing(this)" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -229,15 +232,6 @@
                 "Looking for a clean liquid-cooled build in a Lian Li O11 Dynamic case. Primary focus is 4K Sim Racing (iRacing triple monitors) and rendering 4K video."
               </div>
             </div>
-
-            <div class="flex md:flex-col justify-end gap-2 min-w-[140px]">
-                <button onclick="quoteAction(this, 'Quote sent')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">
-                Send Quote PDF
-              </button>
-                <button onclick="quoteAction(this, 'Request archived')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">
-                Archive
-              </button>
-            </div>
           </div>
 
           <div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6">
@@ -254,15 +248,6 @@
               <div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">
                 "Need 2 identical workstation towers for video editing staff. Minimal RGB, high airflow, 64GB RAM minimum."
               </div>
-            </div>
-
-            <div class="flex md:flex-col justify-end gap-2 min-w-[140px]">
-                <button onclick="quoteAction(this, 'Follow-up marked')" class="bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">
-                Follow Up
-              </button>
-                <button onclick="quoteAction(this, 'Request archived')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">
-                Archive
-              </button>
             </div>
           </div>
         </div>
@@ -364,6 +349,7 @@
         const savedOrders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
         savedOrders.unshift({ id: orderId, customer, phone, email: document.getElementById('manual-email').value.trim(), products: [{ name: system, quantity: Number(document.getElementById('manual-quantity').value) || 1 }], total: Number(total.replace(/[^0-9]/g, '')), status, createdAt: new Date().toISOString() });
         localStorage.setItem('apex-rigs-orders', JSON.stringify(savedOrders));
+        updateOverviewFromStorage();
         updateOrderCount(1);
         addOrderDeleteButtons();
         notify('Manual order created for ' + customer);
@@ -488,7 +474,9 @@
     function addInventoryDeleteButtons() {
       document.querySelectorAll('#inventory-body tr').forEach(row => {
         const actions = row.cells[4];
-        if (actions && !actions.querySelector('[data-delete-listing]')) actions.insertAdjacentHTML('beforeend', '<button data-delete-listing onclick="deleteListing(this)" class="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2 py-1 rounded">Delete</button>');
+        if (actions && !actions.querySelector('[data-delete-listing]')) {
+          actions.insertAdjacentHTML('beforeend', '<button data-delete-listing onclick="deleteListing(this)" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">Delete</button>');
+        }
       });
     }
 
@@ -633,38 +621,113 @@
         const remoteQuotes = await getQuotes();
         const quotes = Array.isArray(remoteQuotes) && remoteQuotes.length ? remoteQuotes : JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
         const list = document.getElementById('quotes-list');
-        list.innerHTML = quotes.slice().reverse().map(quote => '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name || 'Customer') + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email || '') + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">' + escapeHtml(quote.status || 'NEW REQUEST') + '</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform || '') + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>').join('');
+        list.innerHTML = quotes.slice().reverse().map(quote => '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name || 'Customer') + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email || '') + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">' + escapeHtml(quote.status || 'NEW REQUEST') + '</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget || '') + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform || '') + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div></div>').join('');
         localStorage.setItem('apex-rigs-quotes', JSON.stringify(quotes));
       } catch (error) {
         console.warn('Could not restore quotes from Supabase, using local storage fallback:', error.message);
         const quotes = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
         const list = document.getElementById('quotes-list');
         quotes.reverse().forEach(quote => {
-          list.insertAdjacentHTML('afterbegin', '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name) + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email) + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform) + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div><div class="flex md:flex-col justify-end gap-2 min-w-[140px]"><button onclick="quoteAction(this, \'Follow-up marked\')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2 rounded">Follow Up</button><button onclick="quoteAction(this, \'Request archived\')" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs uppercase px-4 py-2 rounded">Archive</button></div></div>');
+          list.insertAdjacentHTML('afterend', '<div class="bg-[#161920] border border-gray-800 p-6 rounded flex flex-col md:flex-row justify-between gap-6"><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-bold text-white">' + escapeHtml(quote.name) + '</span><span class="text-xs text-gray-500 font-mono">' + escapeHtml(quote.email) + '</span><span class="bg-red-950 text-red-400 border border-red-800 text-[10px] font-bold px-2 py-0.5 rounded">NEW REQUEST</span></div><p class="text-xs font-mono text-gray-300"><strong class="text-gray-500">Mobile:</strong> ' + escapeHtml(quote.phone) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Budget:</strong> ' + escapeHtml(quote.budget) + ' &nbsp;|&nbsp; <strong class="text-gray-500">Platform:</strong> ' + escapeHtml(quote.platform) + '</p><div class="bg-[#0f1115] border border-gray-800 p-3 rounded text-xs text-gray-400 font-mono mt-2">' + escapeHtml(quote.notes || 'No additional notes') + '</div></div></div>');
         });
       }
     }
 
     async function updateOverviewFromStorage() {
       try {
-        const orders = await getOrders();
-        const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
-        document.querySelector('#overview-revenue').textContent = revenue.toLocaleString('fr-FR') + ' Dh';
-        document.querySelector('#tab-btn-orders').textContent = 'Orders (' + orders.length + ')';
-        return;
+        // Get orders from localStorage (only source of truth for offline)
+        const storedOrders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
+        const orders = Array.isArray(storedOrders) ? storedOrders : [];
+        
+        console.log('📊 Overview update - Orders found:', orders.length, orders);
+        
+        // Get inventory and quotes
+        const visibleProducts = JSON.parse(localStorage.getItem('apex-rigs-inventory') || '[]');
+        const productCount = Array.isArray(visibleProducts) ? visibleProducts.filter(product => product.visible !== false && !product.disabled).length : 0;
+        const quotes = JSON.parse(localStorage.getItem('apex-rigs-quotes') || '[]');
+        const quoteCount = Array.isArray(quotes) ? quotes.length : 0;
+        
+        // Calculate actual statistics from real orders
+        const revenue = orders.length > 0 ? orders.reduce((sum, order) => {
+          const total = Number(String(order.total || 0).replace(/[^0-9.]/g, ''));
+          return sum + total;
+        }, 0) : 0;
+        
+        const pendingBuilds = orders.filter(order => {
+          const status = String(order.status || 'New Order').toLowerCase();
+          return status.includes('new') || status.includes('assembling') || status.includes('testing') || status.includes('pending');
+        }).length;
+        
+        const avgValue = orders.length > 0 ? Math.round(revenue / orders.length) : 0;
+        
+        // Calculate revenue by channel (default all to gaming if can't determine)
+        let gamingRevenue = 0, customRevenue = 0, workstationRevenue = 0;
+        orders.forEach(order => {
+          const total = Number(String(order.total || 0).replace(/[^0-9.]/g, ''));
+          const products = order.products || [];
+          
+          if (Array.isArray(products) && products.length > 0) {
+            const productNames = products.map(p => String(p.name || '').toLowerCase()).join(' ');
+            if (productNames.includes('workstation')) {
+              workstationRevenue += total;
+            } else if (productNames.includes('custom') || productNames.includes('builder')) {
+              customRevenue += total;
+            } else {
+              gamingRevenue += total;
+            }
+          } else {
+            // Default to gaming if no products specified
+            gamingRevenue += total;
+          }
+        });
+        
+        // Calculate percentages for bar widths
+        const totalChannelRevenue = gamingRevenue + customRevenue + workstationRevenue;
+        const gamingPct = totalChannelRevenue > 0 ? Math.round((gamingRevenue / totalChannelRevenue) * 100) : 0;
+        const customPct = totalChannelRevenue > 0 ? Math.round((customRevenue / totalChannelRevenue) * 100) : 0;
+        const workstationPct = totalChannelRevenue > 0 ? Math.round((workstationRevenue / totalChannelRevenue) * 100) : 0;
+        
+        // Safely update all DOM elements with checks
+        const updateElement = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value;
+        };
+        
+        const updateStyle = (id, width) => {
+          const el = document.getElementById(id);
+          if (el) el.style.width = width + '%';
+        };
+        
+        // Update summary cards
+        updateElement('overview-monthly-revenue', revenue.toLocaleString('en-US') + ' Dh');
+        updateElement('overview-pending-builds', pendingBuilds + ' Rigs');
+        updateElement('overview-instock-rigs', productCount + ' Units');
+        updateElement('overview-open-quotes', quoteCount + ' Requests');
+        updateElement('tab-btn-orders', 'Orders (' + orders.length + ')');
+        updateElement('tab-btn-quotes', 'Quote Requests (' + quoteCount + ')');
+        updateElement('tab-btn-inventory', 'Inventory (' + productCount + ')');
+        
+        // Update overview metrics
+        updateElement('overview-revenue', revenue.toLocaleString('en-US') + ' Dh');
+        updateElement('overview-orders-completed', orders.length);
+        updateElement('overview-avg-value', avgValue.toLocaleString('en-US') + ' Dh');
+        
+        // Update revenue by channel
+        updateElement('channel-gaming-value', gamingRevenue.toLocaleString('en-US') + ' Dh');
+        updateStyle('channel-gaming-bar', gamingPct);
+        updateElement('channel-custom-value', customRevenue.toLocaleString('en-US') + ' Dh');
+        updateStyle('channel-custom-bar', customPct);
+        updateElement('channel-workstation-value', workstationRevenue.toLocaleString('en-US') + ' Dh');
+        updateStyle('channel-workstation-bar', workstationPct);
+        
+        console.log('✓ Overview metrics updated:', { revenue, orders: orders.length, avgValue, gaming: gamingRevenue, custom: customRevenue, workstation: workstationRevenue });
       } catch (error) {
-        console.warn('Could not load order totals from Supabase:', error.message);
+        console.error('❌ Overview calculation error:', error);
       }
-
-      const orders = JSON.parse(localStorage.getItem('apex-rigs-orders') || '[]');
-      const revenue = 184500 + orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
-      document.querySelector('#overview-revenue').textContent = revenue.toLocaleString('fr-FR') + ' Dh';
-      document.querySelector('#tab-btn-orders').textContent = 'Orders (' + (3 + orders.length) + ')';
     }
 
     function updateRevenuePeriod() {
-      const values = { 'This month': '184,500 Dh', 'Last month': '163,700 Dh', 'This quarter': '512,900 Dh' };
-      document.getElementById('overview-revenue').textContent = values[document.getElementById('revenue-period').value];
+      updateOverviewFromStorage();
     }
 
     function quoteAction(button, message) {
@@ -714,13 +777,17 @@
       if (event.key === 'apex-rigs-inventory') {
         restoreInventory();
         addInventoryDeleteButtons();
+        updateOverviewFromStorage();
       }
       if (event.key === 'apex-rigs-orders') {
         restoreCustomerOrders();
         addOrderDeleteButtons();
         updateOverviewFromStorage();
       }
-      if (event.key === 'apex-rigs-quotes') restoreCustomerQuotes();
+      if (event.key === 'apex-rigs-quotes') {
+        restoreCustomerQuotes();
+        updateOverviewFromStorage();
+      }
     });
   </script>
 
