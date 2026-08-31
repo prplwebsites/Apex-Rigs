@@ -16,6 +16,35 @@ let searchTimeout;
 let productsCache = [];
 let activeCategory = '';
 
+const LEGACY_DEFAULT_PRODUCTS = [
+  {
+    name: 'Apex RTX 4070 Super',
+    category: 'Graphics Card'
+  },
+  {
+    name: 'Apex 144Hz Studio',
+    category: 'Monitor'
+  },
+  {
+    name: 'Apex Ryzen 7 7800X3D',
+    category: 'Processor'
+  },
+  {
+    name: 'Apex DDR5 Performance',
+    category: 'Memory'
+  },
+  {
+    name: 'Apex Z790 Creator',
+    category: 'Motherboard'
+  },
+  {
+    name: 'Apex NVMe 2TB',
+    category: 'Storage'
+  }
+];
+
+const DEFAULT_PRODUCTS = [];
+
 // ==================== TRANSLATIONS ====================
 const TRANSLATIONS = {
   fr: {
@@ -30,7 +59,39 @@ const TRANSLATIONS = {
     'Empty cart': 'Votre panier est vide',
     'Add product': 'Ajoutez un produit avant de commander',
     'Product not found': 'Produit non trouvé',
-    'Cart updated': 'Panier mis à jour'
+    'Cart updated': 'Panier mis à jour',
+    'All Products': 'Tous les produits',
+    'Gaming PC': 'PC Gaming',
+    'Workstations': 'Stations de travail',
+    'PC Builder': 'Constructeur PC',
+    'Components': 'Composants',
+    'Support': 'Support',
+    'Free shipping': 'Livraison gratuite',
+    'Shop Gaming PCs': 'Voir les PC gaming',
+    'Build My PC': 'Construire mon PC',
+    'Performance series 2026': 'Série performance 2026',
+    'The gaming PC that fits you.': 'Le PC gaming qui vous convient.',
+    'Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.': 'Configurations prêtes à jouer, assemblées au Maroc et testées avant expédition. Améliorez votre setup aujourd\u2019hui.',
+    'Explore the store': 'Explorez la boutique',
+    'Our Categories': 'Nos catégories',
+    'PC components and builds': 'Composants et configurations PC',
+    'Curated Builds': 'Configurations sélectionnées',
+    'No products found': 'Aucun produit trouvé',
+    'Try another search like "RTX", "AMD" or "gaming".': 'Essayez une autre recherche comme "RTX", "AMD" ou "gaming".',
+    'Warranty & Support': 'Garantie et support',
+    'Search catalog': 'Rechercher dans le catalogue',
+    'Cart': 'Panier',
+    'Checkout': 'Commander',
+    'Your cart is empty': 'Votre panier est vide',
+    'Add a configuration to get started.': 'Ajoutez une configuration pour commencer.',
+    'Complete your order': 'Finaliser votre commande',
+    'Your Details': 'Vos informations',
+    'Full name *': 'Nom complet *',
+    'Mobile *': 'Téléphone *',
+    'Delivery address *': 'Adresse de livraison *',
+    'Confirm Order': 'Confirmer la commande',
+    'View details': 'Voir les détails',
+    'Add to Cart': 'Ajouter au panier'
   },
   en: {
     'Added to cart': 'added to cart',
@@ -44,7 +105,39 @@ const TRANSLATIONS = {
     'Empty cart': 'Your cart is empty',
     'Add product': 'Add a product before checking out',
     'Product not found': 'Product not found',
-    'Cart updated': 'Cart updated'
+    'Cart updated': 'Cart updated',
+    'All Products': 'All Products',
+    'Gaming PC': 'Gaming PC',
+    'Workstations': 'Workstations',
+    'PC Builder': 'PC Builder',
+    'Components': 'Components',
+    'Support': 'Support',
+    'Free shipping': 'Free shipping',
+    'Shop Gaming PCs': 'Shop Gaming PCs',
+    'Build My PC': 'Build My PC',
+    'Performance series 2026': 'Performance series 2026',
+    'The gaming PC that fits you.': 'The gaming PC that fits you.',
+    'Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.': 'Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.',
+    'Explore the store': 'Explore the store',
+    'Our Categories': 'Our Categories',
+    'PC components and builds': 'PC components and builds',
+    'Curated Builds': 'Curated Builds',
+    'No products found': 'No products found',
+    'Try another search like "RTX", "AMD" or "gaming".': 'Try another search like "RTX", "AMD" or "gaming".',
+    'Warranty & Support': 'Warranty & Support',
+    'Search catalog': 'Search catalog',
+    'Cart': 'Cart',
+    'Checkout': 'Checkout',
+    'Your cart is empty': 'Your cart is empty',
+    'Add a configuration to get started.': 'Add a configuration to get started.',
+    'Complete your order': 'Complete your order',
+    'Your Details': 'Your Details',
+    'Full name *': 'Full name *',
+    'Mobile *': 'Mobile *',
+    'Delivery address *': 'Delivery address *',
+    'Confirm Order': 'Confirm Order',
+    'View details': 'View details',
+    'Add to Cart': 'Add to Cart'
   }
 };
 
@@ -53,6 +146,9 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
   try {
+    stripLegacyStorefrontItems();
+    ensureDefaultInventory();
+
     document.querySelectorAll('.page-section').forEach((section) => {
       const isActive = section.id === 'page-gaming';
       section.classList.toggle('active', isActive);
@@ -69,6 +165,7 @@ function initializeApp() {
     loadLanguagePreference();
     loadCart();
     initializeEventListeners();
+    applyTranslations();
     renderMarketplaceProducts();
     loadSharedProducts();
     subscribeToRealtimeUpdates();
@@ -78,6 +175,49 @@ function initializeApp() {
     console.error('Initialization error:', error);
     showToast('Failed to initialize app', 'error');
   }
+}
+
+function ensureDefaultInventory() {
+  try {
+    const key = `${CONFIG.STORAGE_PREFIX}-inventory`;
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+
+    if (!Array.isArray(saved) || saved.length === 0) {
+      localStorage.setItem(key, JSON.stringify([]));
+      productsCache = [];
+      return;
+    }
+
+    const legacyEntries = saved.filter(product =>
+      LEGACY_DEFAULT_PRODUCTS.some(defaultProduct =>
+        defaultProduct.name === product.name && defaultProduct.category === (product.category || 'Gaming PC')
+      )
+    );
+
+    if (legacyEntries.length > 0) {
+      const cleaned = saved.filter(product => !LEGACY_DEFAULT_PRODUCTS.some(defaultProduct =>
+        defaultProduct.name === product.name && defaultProduct.category === (product.category || 'Gaming PC')
+      ));
+      localStorage.setItem(key, JSON.stringify(cleaned));
+      productsCache = cleaned;
+      return;
+    }
+
+    productsCache = saved;
+  } catch (error) {
+    console.warn('Inventory could not be restored:', error.message);
+    productsCache = [];
+    localStorage.setItem(`${CONFIG.STORAGE_PREFIX}-inventory`, JSON.stringify([]));
+  }
+}
+
+function stripLegacyStorefrontItems() {
+  document.querySelectorAll('button, a').forEach((element) => {
+    const text = (element.textContent || '').trim().toLowerCase();
+    if (text.includes('peripheral')) {
+      element.remove();
+    }
+  });
 }
 
 // ==================== LANGUAGE & I18N ====================
@@ -90,24 +230,38 @@ function setLanguage(language) {
   if (!TRANSLATIONS[language]) return;
   currentLanguage = language;
   localStorage.setItem(`${CONFIG.STORAGE_PREFIX}-language`, language);
-  
-  // Update language buttons
+
   const enBtn = document.getElementById('lang-en');
   const frBtn = document.getElementById('lang-fr');
-  
+
   if (enBtn) {
-    enBtn.className = language === 'en' 
-      ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded' 
+    enBtn.className = language === 'en'
+      ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded'
       : 'px-2 py-1 text-[10px] font-black text-gray-300 rounded';
   }
-  
+
   if (frBtn) {
-    frBtn.className = language === 'fr' 
-      ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded' 
+    frBtn.className = language === 'fr'
+      ? 'px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded'
       : 'px-2 py-1 text-[10px] font-black text-gray-300 rounded';
   }
-  
+
+  applyTranslations();
   renderMarketplaceProducts();
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach((element) => {
+    const key = element.getAttribute('data-i18n');
+    const value = t(key);
+    if (value) element.textContent = value;
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+    const key = element.getAttribute('data-i18n-placeholder');
+    const value = t(key);
+    if (value) element.setAttribute('placeholder', value);
+  });
 }
 
 function t(key) {
@@ -261,24 +415,51 @@ function switchPage(pageId) {
 function toggleComponentMenu() {
   const menu = document.getElementById('component-menu');
   const button = document.querySelector('[aria-controls="component-menu"]');
-  
-  if (menu && button) {
-    const isOpen = menu.classList.toggle('hidden');
-    button.setAttribute('aria-expanded', String(!isOpen));
-  }
+
+  if (!menu || !button) return;
+
+  const willOpen = menu.classList.contains('hidden');
+  menu.classList.toggle('hidden');
+  button.setAttribute('aria-expanded', String(willOpen));
 }
 
 function closeComponentMenu(event) {
   const menu = document.getElementById('component-menu');
   const button = document.querySelector('[aria-controls="component-menu"]');
-  
+
+  if (!menu) return;
+
   if (!event || event.target === menu) {
-    if (menu) menu.classList.add('hidden');
+    menu.classList.add('hidden');
     if (button) button.setAttribute('aria-expanded', 'false');
   }
 }
 
 // ==================== PRODUCTS & CATALOG ====================
+async function getProducts() {
+  if (typeof window !== 'undefined' && window.getProducts) {
+    return window.getProducts();
+  }
+  const local = JSON.parse(localStorage.getItem(`${CONFIG.STORAGE_PREFIX}-inventory`) || '[]');
+  return Array.isArray(local) ? local : [];
+}
+
+async function createOrder(order) {
+  if (typeof window !== 'undefined' && window.createOrder) {
+    return window.createOrder(order);
+  }
+  console.warn('Supabase order sync is unavailable; storing order locally only.');
+  return { ok: true, data: order };
+}
+
+async function createQuote(quote) {
+  if (typeof window !== 'undefined' && window.createQuote) {
+    return window.createQuote(quote);
+  }
+  console.warn('Supabase quote sync is unavailable; storing quote locally only.');
+  return { ok: true, data: quote };
+}
+
 async function loadSharedProducts() {
   try {
     const products = await getProducts();
@@ -289,11 +470,16 @@ async function loadSharedProducts() {
     console.warn('Could not load products from Supabase:', error.message);
     const cached = localStorage.getItem(`${CONFIG.STORAGE_PREFIX}-inventory`);
     if (cached) {
-      productsCache = JSON.parse(cached);
+      try {
+        productsCache = JSON.parse(cached);
+      } catch {
+        productsCache = DEFAULT_PRODUCTS;
+      }
       renderMarketplaceProducts();
       return;
     }
     productsCache = [];
+    localStorage.setItem(`${CONFIG.STORAGE_PREFIX}-inventory`, JSON.stringify([]));
     renderMarketplaceProducts();
   }
 }
