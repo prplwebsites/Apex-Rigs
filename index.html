@@ -59,15 +59,15 @@
     .component-mega { animation: menu-drop 180ms ease-out; }
     @keyframes menu-drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .component-link { color: #e9eef5; border: 1px solid #2a384d; border-radius: 6px; padding: 14px 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; text-align: left; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-    .component-link svg { width: 23px; height: 23px; color: #ef2b2d; }
+    .component-link svg { width: 40px; height: 40px; color: #ef2b2d; }
     .component-link:hover { color: white; background: #ef2b2d; border-color: #ef2b2d; transform: translateY(-2px); }
     .category-tile { flex: 0 0 176px; color: #10151c; text-align: center; padding: 8px 6px 4px; border-radius: 10px; }
     .category-tile strong { display: block; margin-top: 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
     .category-tile > span:last-child { display: block; margin-top: 5px; color: #7a8797; font-size: 10px; }
-    .category-art { display: flex; align-items: center; justify-content: center; height: 92px; color: #10151c; font-size: 42px; font-weight: 900; background: transparent !important; border: 0; transition: color 180ms ease; }
-    .category-art img { width: 116px; height: 82px; object-fit: contain; filter: drop-shadow(0 8px 6px rgba(0,0,0,.24)); transition: transform 180ms ease, filter 180ms ease; }
+    .category-art { display: flex; align-items: center; justify-content: center; height: 110px; width: 100%; color: #10151c; font-size: 42px; font-weight: 900; background: transparent !important; border: 0; transition: color 180ms ease; overflow: hidden; }
+    .category-art i { transition: transform 180ms ease, filter 180ms ease; }
     .category-tile:hover { background: #f4f6f8; }
-    .category-tile:hover .category-art img { transform: translateY(-5px) scale(1.06); filter: drop-shadow(0 12px 8px rgba(0,0,0,.34)); }
+    .category-tile:hover .category-art i { transform: translateY(-5px) scale(1.1); }
     .category-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 28px; height: 28px; color: #637187; font-size: 27px; line-height: 20px; }
     .category-arrow:hover { color: #ef2b2d; }
     #category-track { overflow: hidden; }
@@ -82,13 +82,7 @@
     .storefront #page-gaming > section:nth-child(2) .category-tile { color: #edf2f7; }
     .storefront #page-gaming > section:nth-child(2) .category-tile:hover { background: #1d2a3b; }
     .storefront #page-gaming > section:nth-child(2) .category-tile > span:last-child { color: #8998aa; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-red-50 { color: #ef5356; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-blue-50 { color: #71a9ff; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-amber-50 { color: #f3c45f; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-emerald-50 { color: #54d5bd; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-violet-50 { color: #b2a4ff; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-cyan-50 { color: #67d7ed; }
-    .storefront #page-gaming > section:nth-child(2) .category-art.bg-slate-100 { color: #c4d0dd; }
+    .storefront #page-gaming > section:nth-child(2) .category-art i { color: inherit; }
   </style>
 </head>
 <body class="storefront bg-[#0f1115] text-gray-100 antialiased min-h-screen flex flex-col justify-between">
@@ -112,22 +106,22 @@
           </button>
         </div>
         <label class="flex min-w-0 flex-1 max-w-xl items-center bg-gray-100 border border-gray-200 rounded-full px-4 sm:px-5 py-3 gap-3">
-          <span class="text-gray-400" aria-hidden="true">⌕</span><input id="catalog-search" type="search" placeholder="Search catalog" aria-label="Search products" class="bg-transparent outline-none text-xs sm:text-sm text-gray-800 w-full placeholder:text-gray-400">
+          <span class="text-gray-400" aria-hidden="true">⌕</span><input id="catalog-search" type="search" data-i18n-placeholder="Search catalog" placeholder="Search catalog" aria-label="Search products" class="bg-transparent outline-none text-xs sm:text-sm text-gray-800 w-full placeholder:text-gray-400">
         </label>
         <div class="flex items-center gap-4 text-[#10151c]">
           <button data-page="support" class="hidden lg:block text-xs font-bold uppercase hover:text-red-600">Help</button>
           <div class="flex items-center gap-1 rounded border border-gray-600 p-1"><button id="lang-en" onclick="setLanguage('en')" class="px-2 py-1 text-[10px] font-black bg-red-600 text-white rounded">EN</button><button id="lang-fr" onclick="setLanguage('fr')" class="px-2 py-1 text-[10px] font-black text-gray-300 rounded">FR</button></div>
-          <button onclick="showCart()" class="relative text-xs font-bold uppercase whitespace-nowrap hover:text-red-600">Cart <span id="cart-count" class="ml-1 inline-flex items-center justify-center rounded-full bg-red-600 text-white w-5 h-5">0</span></button>
+          <button onclick="showCart()" class="relative text-xs font-bold uppercase whitespace-nowrap hover:text-red-600"><span data-i18n="Cart">Cart</span> <span id="cart-count" class="ml-1 inline-flex items-center justify-center rounded-full bg-red-600 text-white w-5 h-5">0</span></button>
         </div>
       </div>
       <nav class="bg-[#10151c] text-white">
         <div class="max-w-7xl mx-auto px-6 h-12 flex items-center gap-7 overflow-x-auto whitespace-nowrap text-[11px] font-bold uppercase tracking-wide">
-          <button data-page="gaming" id="nav-gaming" class="nav-btn bg-red-600 px-4 h-full">All Products</button>
-          <button onclick="showCatalogCategory('Gaming PC')" class="hover:text-red-400 transition">Gaming PC</button>
-          <button data-page="workstations" id="nav-workstations" class="nav-btn hover:text-red-400 transition">Workstations</button>
-          <button data-page="builder" id="nav-builder" class="nav-btn hover:text-red-400 transition">PC Builder</button>
-          <button onclick="toggleComponentMenu()" aria-expanded="false" aria-controls="component-menu" class="component-trigger hover:text-red-400 transition h-full"><i data-lucide="menu" aria-hidden="true"></i><span>Components</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
-          <button data-page="support" id="nav-support" class="nav-btn hover:text-red-400 transition">Support</button>
+          <button data-page="gaming" id="nav-gaming" class="nav-btn bg-red-600 px-4 h-full" data-i18n="All Products">All Products</button>
+          <button onclick="showCatalogCategory('Gaming PC')" class="hover:text-red-400 transition" data-i18n="Gaming PC">Gaming PC</button>
+          <button data-page="workstations" id="nav-workstations" class="nav-btn hover:text-red-400 transition" data-i18n="Workstations">Workstations</button>
+          <button data-page="builder" id="nav-builder" class="nav-btn hover:text-red-400 transition" data-i18n="PC Builder">PC Builder</button>
+          <button onclick="toggleComponentMenu()" aria-expanded="false" aria-controls="component-menu" class="component-trigger hover:text-red-400 transition h-full"><i data-lucide="menu" aria-hidden="true"></i><span data-i18n="Components">Components</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+          <button data-page="support" id="nav-support" class="nav-btn hover:text-red-400 transition" data-i18n="Support">Support</button>
         </div>
       </nav>
     </header>
@@ -135,13 +129,13 @@
     <div id="component-menu" class="hidden fixed inset-0 z-[55] bg-black/70" onclick="closeComponentMenu(event)">
       <div class="component-mega absolute left-0 top-[132px] w-full bg-[#121a26] border-b border-gray-700 shadow-2xl" onclick="event.stopPropagation()">
         <div class="max-w-7xl mx-auto px-6 py-6"><div class="flex items-start justify-between mb-5"><div><span class="text-[10px] uppercase tracking-[0.2em] text-red-400 font-black">Build your setup</span><h2 class="text-xl font-black text-white uppercase mt-1">PC Components</h2></div><button onclick="closeComponentMenu()" aria-label="Close components menu" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button></div><div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-          <button onclick="showCatalogCategory('Processor')" class="component-link"><i data-lucide="cpu"></i><span>CPU</span></button>
-          <button onclick="showCatalogCategory('Graphics Card')" class="component-link"><i data-lucide="gpu"></i><span>GPU</span></button>
-          <button onclick="showCatalogCategory('Memory')" class="component-link"><i data-lucide="memory-stick"></i><span>RAM</span></button>
-          <button onclick="showCatalogCategory('Monitor')" class="component-link"><i data-lucide="monitor"></i><span>Displays</span></button>
-          <button onclick="showCatalogCategory('Motherboard')" class="component-link"><i data-lucide="circuit-board"></i><span>Mobos</span></button>
-          <button onclick="showCatalogCategory('Storage')" class="component-link"><i data-lucide="hard-drive"></i><span>Storage</span></button>
-          <button onclick="showCatalogCategory('Case')" class="component-link"><i data-lucide="box"></i><span>Cases</span></button>
+          <button onclick="showCatalogCategory('Processor')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="12" width="40" height="40" rx="8" fill="#1f2937" stroke="#f87171" stroke-width="2"/><rect x="18" y="18" width="28" height="28" rx="4" fill="#111827" stroke="#f8fafc" stroke-width="2"/><g fill="#e5e7eb"><rect x="23" y="9" width="4" height="8" rx="2"/><rect x="37" y="9" width="4" height="8" rx="2"/><rect x="23" y="47" width="4" height="8" rx="2"/><rect x="37" y="47" width="4" height="8" rx="2"/></g><g fill="#fca5a5"><rect x="20" y="24" width="8" height="8" rx="2"/><rect x="34" y="24" width="8" height="8" rx="2"/><rect x="20" y="32" width="8" height="8" rx="2"/><rect x="34" y="32" width="8" height="8" rx="2"/></g></svg><span>CPU</span></button>
+          <button onclick="showCatalogCategory('Graphics Card')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="18" width="44" height="28" rx="6" fill="#111827" stroke="#fca5a5" stroke-width="2"/><rect x="15" y="23" width="34" height="18" rx="4" fill="#1f2937" /><circle cx="22" cy="32" r="5" fill="#ef4444"/><circle cx="32" cy="32" r="5" fill="#fbbf24"/><circle cx="42" cy="32" r="5" fill="#f87171"/><rect x="18" y="46" width="28" height="6" rx="3" fill="#374151"/><rect x="27" y="8" width="10" height="10" rx="2" fill="#374151" stroke="#fca5a5" stroke-width="2"/></svg><span>GPU</span></button>
+          <button onclick="showCatalogCategory('Memory')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="14" width="10" height="36" rx="3" fill="#111827" stroke="#93c5fd" stroke-width="2"/><rect x="26" y="10" width="10" height="40" rx="3" fill="#111827" stroke="#93c5fd" stroke-width="2"/><rect x="40" y="14" width="10" height="36" rx="3" fill="#111827" stroke="#93c5fd" stroke-width="2"/><g fill="#dbeafe"><rect x="14" y="18" width="6" height="12" rx="2"/><rect x="28" y="14" width="6" height="12" rx="2"/><rect x="42" y="18" width="6" height="12" rx="2"/></g></svg><span>RAM</span></button>
+          <button onclick="showCatalogCategory('Monitor')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="14" width="44" height="28" rx="3" fill="#111827" stroke="#93c5fd" stroke-width="2"/><rect x="16" y="19" width="32" height="18" rx="2" fill="#1d4ed8"/><rect x="25" y="42" width="14" height="6" rx="2" fill="#374151"/><rect x="22" y="48" width="20" height="4" rx="2" fill="#0f172a"/></svg><span>Displays</span></button>
+          <button onclick="showCatalogCategory('Motherboard')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="6" fill="#1f2937" stroke="#c4b5fd" stroke-width="2"/><path d="M14 22h36M14 30h36M14 38h36M22 16v32M32 16v32M42 16v32" stroke="#374151" stroke-width="2"/><rect x="16" y="18" width="12" height="8" rx="2" fill="#111827" stroke="#e9d5ff" stroke-width="2"/><rect x="36" y="18" width="12" height="8" rx="2" fill="#111827" stroke="#e9d5ff" stroke-width="2"/><rect x="24" y="34" width="16" height="10" rx="2" fill="#111827" stroke="#e9d5ff" stroke-width="2"/></svg><span>Mobos</span></button>
+          <button onclick="showCatalogCategory('Storage')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="15" y="18" width="34" height="28" rx="5" fill="#111827" stroke="#67e8f9" stroke-width="2"/><rect x="20" y="23" width="24" height="18" rx="3" fill="#0f172a" stroke="#a5f3fc" stroke-width="2"/><path d="M26 29h12M26 35h12" stroke="#a5f3fc" stroke-width="2"/><rect x="22" y="12" width="20" height="6" rx="2" fill="#1f2937" stroke="#67e8f9" stroke-width="2"/></svg><span>Storage</span></button>
+          <button onclick="showCatalogCategory('Case')" class="component-link"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 20h28v28c0 3-2 5-5 5H23c-3 0-5-2-5-5V20z" fill="#111827" stroke="#f8fafc" stroke-width="2"/><path d="M22 20V12h20v8" fill="#1f2937" stroke="#f8fafc" stroke-width="2"/><rect x="22" y="26" width="20" height="14" rx="3" fill="#374151"/><circle cx="32" cy="33" r="4" fill="#ef4444"/><rect x="25" y="44" width="14" height="4" rx="2" fill="#f8fafc" opacity="0.8"/></svg><span>Cases</span></button>
         </div></div>
       </div>
     </div>
@@ -150,10 +144,10 @@
       <section class="bg-[#eef1f4] py-8 md:py-12 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-[1.05fr_0.95fr] gap-8 items-center">
           <div class="order-2 md:order-1">
-            <span class="inline-flex items-center gap-2 text-red-600 text-xs font-black uppercase tracking-widest mb-4"><span class="w-2 h-2 rounded-full bg-red-600"></span> Performance series 2026</span>
-            <h1 class="text-4xl md:text-6xl font-black text-[#10151c] tracking-tight leading-[0.95] uppercase">The gaming PC that fits you.</h1>
-            <p class="text-gray-600 mt-5 max-w-lg text-sm md:text-base leading-relaxed">Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.</p>
-            <div class="mt-7 flex flex-wrap gap-3"><a href="#prebuilts" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Shop Gaming PCs</a><button onclick="switchPage('builder')" class="border border-[#10151c] text-[#10151c] hover:bg-[#10151c] hover:text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition">Build My PC</button></div>
+            <span class="inline-flex items-center gap-2 text-red-600 text-xs font-black uppercase tracking-widest mb-4"><span class="w-2 h-2 rounded-full bg-red-600"></span> <span data-i18n="Performance series 2026">Performance series 2026</span></span>
+            <h1 class="text-4xl md:text-6xl font-black text-[#10151c] tracking-tight leading-[0.95] uppercase" data-i18n="The gaming PC that fits you.">The gaming PC that fits you.</h1>
+            <p class="text-gray-600 mt-5 max-w-lg text-sm md:text-base leading-relaxed" data-i18n="Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.">Ready-to-play configurations, assembled in Morocco and tested before shipping. Level up your setup today.</p>
+            <div class="mt-7 flex flex-wrap gap-3"><a href="#prebuilts" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition" data-i18n="Shop Gaming PCs">Shop Gaming PCs</a><button onclick="switchPage('builder')" class="border border-[#10151c] text-[#10151c] hover:bg-[#10151c] hover:text-white font-bold text-xs px-6 py-3.5 rounded uppercase tracking-wider transition" data-i18n="Build My PC">Build My PC</button></div>
             <div class="mt-8 flex gap-6 text-xs font-bold uppercase text-gray-500"><span>✓ 2-year warranty</span><span>✓ 24h tested</span></div>
           </div>
           <div class="order-1 md:order-2 h-64 md:h-[350px] rounded overflow-hidden relative bg-[#10151c]"><img src="https://images.unsplash.com/photo-1614179924047-e1ab49a0a0cf?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.0.0" alt="Gaming PC" class="w-full h-full object-cover"><div class="absolute bottom-4 left-4 bg-white px-4 py-3 rounded"><span class="block text-[10px] uppercase font-bold text-gray-500">Starting from</span><strong class="text-xl text-[#10151c]">9,990 Dh</strong></div></div>
@@ -161,92 +155,18 @@
       </section>
 
       <section class="bg-[#f4f6f8] py-8 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-4"><div><span class="text-red-600 text-[10px] font-black uppercase tracking-widest">Explore the store</span><h2 class="text-2xl font-black text-[#10151c] uppercase mt-1">Our Categories</h2></div><span class="text-xs text-gray-500 hidden sm:block">PC components and builds</span></div><div class="relative bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6"><button onclick="scrollCategories(-1)" aria-label="Previous categories" class="category-arrow left-2">‹</button><div id="category-track" class="flex gap-3 md:gap-6 overflow-hidden px-8"><button onclick="showCatalogCategory('Graphics Card')" class="category-tile"><span class="category-art bg-red-50"><i data-lucide="gpu"></i></span><strong>GPU</strong><span>Graphics cards</span></button><button onclick="showCatalogCategory('Monitor')" class="category-tile"><span class="category-art bg-blue-50"><i data-lucide="monitor"></i></span><strong>Displays</strong><span>Gaming monitors</span></button><button onclick="showCatalogCategory('Processor')" class="category-tile"><span class="category-art bg-amber-50"><i data-lucide="cpu"></i></span><strong>CPU</strong><span>Processors</span></button><button onclick="showCatalogCategory('Memory')" class="category-tile"><span class="category-art bg-emerald-50"><i data-lucide="memory-stick"></i></span><strong>RAM</strong><span>Memory kits</span></button><button onclick="showCatalogCategory('Motherboard')" class="category-tile"><span class="category-art bg-violet-50"><i data-lucide="circuit-board"></i></span><strong>Motherboards</strong><span>Build platforms</span></button><button onclick="showCatalogCategory('Storage')" class="category-tile"><span class="category-art bg-cyan-50"><i data-lucide="hard-drive"></i></span><strong>Storage</strong><span>SSD and NVMe</span></button><button onclick="showCatalogCategory('Case')" class="category-tile"><span class="category-art bg-slate-100"><i data-lucide="box"></i></span><strong>Cases</strong><span>PC chassis</span></button></div><button onclick="scrollCategories(1)" aria-label="Next categories" class="category-arrow right-2">›</button></div></div>
+        <div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-4"><div><span class="text-red-600 text-[10px] font-black uppercase tracking-widest">Explore the store</span><h2 class="text-2xl font-black text-[#10151c] uppercase mt-1">Our Categories</h2></div><span class="text-xs text-gray-500 hidden sm:block">PC components and builds</span></div><div class="relative bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6"><button onclick="scrollCategories(-1)" aria-label="Previous categories" class="category-arrow left-2">‹</button><div id="category-track" class="flex gap-3 md:gap-6 overflow-hidden px-8"><button onclick="showCatalogCategory('Graphics Card')" class="category-tile"><span class="category-art"><i data-lucide="zap" style="width: 64px; height: 64px; color: #ef2b2d;"></i></span><strong>GPU</strong><span>Graphics cards</span></button><button onclick="showCatalogCategory('Monitor')" class="category-tile"><span class="category-art"><i data-lucide="monitor" style="width: 64px; height: 64px; color: #3b82f6;"></i></span><strong>Displays</strong><span>Gaming monitors</span></button><button onclick="showCatalogCategory('Processor')" class="category-tile"><span class="category-art"><i data-lucide="cpu" style="width: 64px; height: 64px; color: #f59e0b;"></i></span><strong>CPU</strong><span>Processors</span></button><button onclick="showCatalogCategory('Memory')" class="category-tile"><span class="category-art"><i data-lucide="layers" style="width: 64px; height: 64px; color: #10b981;"></i></span><strong>RAM</strong><span>Memory kits</span></button><button onclick="showCatalogCategory('Motherboard')" class="category-tile"><span class="category-art"><i data-lucide="circuit-board" style="width: 64px; height: 64px; color: #8b5cf6;"></i></span><strong>Motherboards</strong><span>Build platforms</span></button><button onclick="showCatalogCategory('Storage')" class="category-tile"><span class="category-art"><i data-lucide="hard-drive" style="width: 64px; height: 64px; color: #06b6d4;"></i></span><strong>Storage</strong><span>SSD and NVMe</span></button><button onclick="showCatalogCategory('Case')" class="category-tile"><span class="category-art"><i data-lucide="box" style="width: 64px; height: 64px; color: #6b7280;"></i></span><strong>Cases</strong><span>PC chassis</span></button></div><button onclick="scrollCategories(1)" aria-label="Next categories" class="category-arrow right-2">›</button></div></div>
       </section>
 
       <section id="featured-section" class="bg-[#10151c] py-10 hidden"><div class="max-w-7xl mx-auto px-6"><div class="flex items-end justify-between mb-5"><div><span class="text-red-400 text-[10px] font-black uppercase tracking-widest">APEX SELECTION</span><h2 class="text-2xl font-black text-white uppercase mt-1">Featured Products</h2></div><span class="text-xs text-gray-400">Our team's top picks</span></div><div id="featured-products" class="grid md:grid-cols-3 gap-5"></div></div></section>
 
       <section id="prebuilts" class="py-16 max-w-7xl mx-auto px-6">
         <div class="mb-8">
-          <h2 class="text-2xl font-black uppercase tracking-tight">Pre-Configured Gaming Rigs</h2>
-          <p class="text-gray-400 text-xs mt-1">Select a performance tier to review exact component specs.</p>
+          <h2 class="text-2xl font-black uppercase tracking-tight">Curated Builds</h2>
+          <p class="text-gray-400 text-xs mt-1">Only the best-performing setups are kept visible.</p>
         </div>
 
-        <div id="product-grid" class="grid md:grid-cols-3 gap-6">
-          <div data-category="Gaming PC" data-product="vector i5 gaming pc intel rtx 4060" class="catalog-product bg-[#161920] border border-gray-800 rounded flex flex-col justify-between hover:border-gray-700 transition">
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest bg-gray-800 text-gray-300 px-2 py-1 rounded">Entry Tier</span>
-                <span class="text-xs font-bold text-emerald-400">Ships in 24 Hours</span>
-              </div>
-              <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-                <img src="https://images.unsplash.com/photo-1614151271479-a1e010e6f2fa?q=80&w=600" alt="The Vector i5 Gaming PC" class="w-full h-full object-cover">
-              </div>
-              <h3 class="text-lg font-extrabold uppercase text-white">The Vector i5</h3>
-              <p class="text-xs text-gray-400 mt-1 mb-4">Targeted for 1080p Esports & High-FPS Gaming</p>
-              <div class="space-y-2 border-t border-b border-gray-800/80 py-4 text-xs font-mono">
-                <div class="flex justify-between"><span class="text-gray-500">CPU</span> <span class="text-gray-200">Intel Core i5-13400F</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">GPU</span> <span class="text-gray-200">NVIDIA RTX 4060 8GB</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">RAM</span> <span class="text-gray-200">16GB DDR5 5600MHz</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">STORAGE</span> <span class="text-gray-200">1TB Gen4 NVMe M.2</span></div>
-              </div>
-            </div>
-            <div class="p-6 pt-0 flex items-center justify-between">
-              <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">9,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Vector i5')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
-            </div>
-          </div>
-
-          <div data-category="Gaming PC" data-product="apex 7800x3d gaming pc amd rtx 4070" class="catalog-product bg-[#161920] border border-red-600/40 rounded flex flex-col justify-between relative shadow-lg">
-            <div class="absolute -top-3 left-6 bg-red-600 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded text-white">Most Popular</div>
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest bg-gray-800 text-gray-300 px-2 py-1 rounded">Mid Tier</span>
-                <span class="text-xs font-bold text-emerald-400">Ships in 24 Hours</span>
-              </div>
-              <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-                <img src="https://images.unsplash.com/photo-1595225476933-018acacda63d?q=80&w=600" alt="The Apex 7800X3D Gaming PC" class="w-full h-full object-cover">
-              </div>
-              <h3 class="text-lg font-extrabold uppercase text-white">The Apex 7800X3D</h3>
-              <p class="text-xs text-gray-400 mt-1 mb-4">Optimized for 1440p Ultra Settings & Streaming</p>
-              <div class="space-y-2 border-t border-b border-gray-800/80 py-4 text-xs font-mono">
-                <div class="flex justify-between"><span class="text-gray-500">CPU</span> <span class="text-gray-200">AMD Ryzen 7 7800X3D</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">GPU</span> <span class="text-gray-200">NVIDIA RTX 4070 Super 12GB</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">RAM</span> <span class="text-gray-200">32GB DDR5 6000MHz</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">STORAGE</span> <span class="text-gray-200">2TB Gen4 NVMe M.2</span></div>
-              </div>
-            </div>
-            <div class="p-6 pt-0 flex items-center justify-between">
-              <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">17,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Apex 7800X3D')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
-            </div>
-          </div>
-
-          <div data-category="Gaming PC" data-product="dominator 4090 gaming pc intel rtx 4090" class="catalog-product bg-[#161920] border border-gray-800 rounded flex flex-col justify-between hover:border-gray-700 transition">
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest bg-gray-800 text-gray-300 px-2 py-1 rounded">Enthusiast</span>
-                <span class="text-xs font-bold text-gray-400">3-Day Custom Lead</span>
-              </div>
-              <div class="h-44 bg-gray-900 rounded mb-6 flex items-center justify-center text-xs font-mono text-gray-600 border border-gray-800">
-               <img src="https://images.unsplash.com/photo-1587289882938-66160cf22dcb?q=80&w=600" alt="The Dominator 4090 Gaming PC" class="w-full h-full object-cover">
-              </div>
-              <h3 class="text-lg font-extrabold uppercase text-white">The Dominator 4090</h3>
-              <p class="text-xs text-gray-400 mt-1 mb-4">Uncompromised 4K Gaming & Workstation Power</p>
-              <div class="space-y-2 border-t border-b border-gray-800/80 py-4 text-xs font-mono">
-                <div class="flex justify-between"><span class="text-gray-500">CPU</span> <span class="text-gray-200">Intel Core i9-14900KF</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">GPU</span> <span class="text-gray-200">NVIDIA RTX 4090 24GB</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">RAM</span> <span class="text-gray-200">64GB DDR5 6400MHz</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">STORAGE</span> <span class="text-gray-200">4TB Gen4 NVMe (2x2TB)</span></div>
-              </div>
-            </div>
-            <div class="p-6 pt-0 flex items-center justify-between">
-              <div><span class="text-xs text-gray-500 block">Starting at</span><span class="text-2xl font-black text-white">34,990 Dh</span></div>
-              <div class="flex gap-2"><button onclick="addToCart('The Dominator 4090')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase px-4 py-2.5 rounded transition">Add Cart</button><button onclick="switchPage('builder')" class="border border-gray-600 hover:border-white text-white font-bold text-xs uppercase px-3 py-2.5 rounded transition">Customize</button></div>
-            </div>
-          </div>
-        </div>
-        <div id="dynamic-products" class="grid md:grid-cols-3 gap-6 mt-6"></div>
+        <div id="dynamic-products" class="grid md:grid-cols-3 gap-6"></div>
         <div id="catalog-empty" class="catalog-empty text-center border border-dashed border-gray-700 rounded py-12 mt-6">
           <p class="text-lg font-black uppercase text-white">No products found</p>
           <p class="text-xs text-gray-500 mt-2">Try another search like "RTX", "AMD" or "gaming".</p>
